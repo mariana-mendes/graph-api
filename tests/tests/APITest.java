@@ -14,31 +14,25 @@ import graph.Graph;
 
 public class APITest {
 	
-	//API api;
-	GraphController graphController;
+	API api;
 	
 	@Before
 	public void criaAPI() {
-		//api = new API();
-		graphController = new GraphController();
+		api = new API();
 		
 	}
 	@Test
 	public void test() {
-		try {
-			Graph graph = graphController.readGraph("teste.txt");
-			Set<Integer> v = graph.getVertexes();
-			for (Integer i: v) {
-				System.out.println(i);
-			}
-			
-			Set<Edge> e = graph.getEdges();
-			for(Edge ee :e) {
-				System.out.println(ee.getEdge());
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Graph graph;
+		graph = api.readGraph("input.txt");
+		Set<Integer> v = graph.getVertexes();
+		for (Integer i: v) {
+			System.out.println(i);
+		}
+		
+		Set<Edge> e = graph.getEdges();
+		for(Edge ee :e) {
+			System.out.println(ee.getEdge());
 		}
 	}
 
