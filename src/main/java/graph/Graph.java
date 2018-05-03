@@ -17,16 +17,18 @@ public class Graph {
 	public Graph() {
 	}
 
-	public Graph(List<Integer> inputVertexes, List<Integer> outputVertexes, List<Integer> values) {
+	public Graph(List<Integer> inputVertexes, List<Integer> outputVertexes, List<Double> values, int numVertexes) {
 		this.edges = new HashSet<Edge>();
 		this.vertexes = new HashSet<Integer>();
-		this.buildEdges(inputVertexes, outputVertexes, values);
+		this.buildEdges(inputVertexes, outputVertexes, values, numVertexes);
+		this.buildVertexes(numVertexes);
 	}
 
-	public Graph(List<Integer> inputVertexes, List<Integer> outputVertexes) {
+	public Graph(List<Integer> inputVertexes, List<Integer> outputVertexes, int numVertexes) {
 		this.edges = new HashSet<Edge>();
 		this.vertexes = new HashSet<Integer>();
-		this.buildEdges(inputVertexes, outputVertexes);
+		this.buildEdges(inputVertexes, outputVertexes, numVertexes);
+		this.buildVertexes(numVertexes);
 	}
 
 	/**
@@ -45,7 +47,7 @@ public class Graph {
 	 * 
 	 *            TO-DO: Refatorar método.
 	 */
-	private void buildEdges(List<Integer> inputVertexes, List<Integer> outputVertexes, List<Integer> values) {
+	private void buildEdges(List<Integer> inputVertexes, List<Integer> outputVertexes, List<Double> values, int numVertexes) {
 		for (int i = 0; i < inputVertexes.size(); i++) {
 			vertexes.add(inputVertexes.get(i));
 			vertexes.add(outputVertexes.get(i));
@@ -62,7 +64,7 @@ public class Graph {
 	 * @param inputVertexes
 	 * @param outputVertexes
 	 */
-	private void buildEdges(List<Integer> inputVertexes, List<Integer> outputVertexes) {
+	private void buildEdges(List<Integer> inputVertexes, List<Integer> outputVertexes, int numVertexes) {
 		for (int i = 0; i < inputVertexes.size(); i++) {
 			vertexes.add(inputVertexes.get(i));
 			vertexes.add(outputVertexes.get(i));
@@ -70,6 +72,16 @@ public class Graph {
 			pair.put(inputVertexes.get(i), outputVertexes.get(i));
 			Edge e = new Edge(inputVertexes.get(i), outputVertexes.get(i));
 			this.edges.add(e);
+		}
+	}
+	
+	private void buildVertexes(int numVertexes) {
+		if(this.vertexes.size() < numVertexes) {
+			int n = numVertexes - vertexes.size();
+			
+			for(int i = 0; i < n; i ++) {
+				vertexes.add(vertexes.size() + 1);
+			}
 		}
 	}
 
