@@ -47,7 +47,7 @@ public class API {
 	}
 	
 	
-	public float getMeanEdge(){
+	public float getMeanEdge(Graph graph){
 		int grade = 0;
 		grade = (2*graph.getEdges().size())/graph.getVertexes().size();
 		return grade;
