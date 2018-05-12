@@ -56,12 +56,15 @@ public class API {
 	
 	public void getshortestpath(int v1, int v2){
 		
-		
 	}
     
 	private int minDistance(int[] distance, Boolean[] set) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public void graphRepresentation(Graph g,String type) {
+		this.controller.graphRepresentation(g, type);
 	}
 	
 }
