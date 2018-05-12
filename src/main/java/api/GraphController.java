@@ -117,7 +117,36 @@ public class GraphController {
 		if(type.equals(ADJACENCY_LIST)) {
 			this.printAdjacencyList(g);
 		}else if(type.equals(ADJACENCY_MATRIZ)) {
-			//codigo
+			this.printAdjacencyMatrix(g);
+		}
+	}
+	
+	private void printAdjacencyMatrix(Graph g) {
+		int[][] matrizAdjacencia = new int[g.getVertexes().size()+1][g.getVertexes().size()+1];
+		
+		int j = 1;
+		for (int i = 1; i < matrizAdjacencia.length; i++) {
+			matrizAdjacencia[i][0] = j;
+			j++;
+		}
+		
+		int k = 1;
+		for (int i = 1; i < matrizAdjacencia.length; i++) {
+			matrizAdjacencia[0][k] = k;
+			k++;
+		}
+		
+		
+		Set<Edge> edges = g.getEdges();
+		
+		for(Edge e: edges) {
+			Set<Integer> inputVertexes = e.getEgde().keySet();
+			
+			for(Integer v:inputVertexes) {
+				Integer outputVertexe = e.getEgde().get(v);
+				matrizAdjacencia[v.intValue()][outputVertexe.intValue()] = 1;
+				matrizAdjacencia[outputVertexe.intValue()][v.intValue()] = 1;
+			}
 		}
 	}
 	
