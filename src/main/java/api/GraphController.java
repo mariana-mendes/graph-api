@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class GraphController {
 	public final static int PRIMEIRA_LINHA = 0;
 	public final static String ESPACO_EM_BRANCO = " ";
 	public final static String ADJACENCY_LIST = "AL";
+	public final static String ADJACENCY_MATRIZ = "AM";
 
 	Util util;
 
@@ -83,6 +85,25 @@ public class GraphController {
 
 		return graph;
 	}
+	
+	public int getVertexNumber(Graph graph){
+		
+		return graph.getVertexes().size();
+		
+	}
+	
+	public int getEdgeNumber(Graph graph){
+		 return graph.getEdges().size();
+		
+	}
+	
+	
+	public float getMeanEdge(Graph graph){
+		int grade = 0;
+		grade = (2*graph.getEdges().size())/graph.getVertexes().size();
+		return grade;
+		
+	}
 
 	private int getGreaterVertex(Graph g) {
 		int max = g.getVertexes().stream().mapToInt(v -> v).max().orElseThrow(NoSuchElementException::new);
@@ -95,6 +116,8 @@ public class GraphController {
 	public void graphRepresentation(Graph g, String type) {
 		if(type.equals(ADJACENCY_LIST)) {
 			this.printAdjacencyList(g);
+		}else if(type.equals(ADJACENCY_MATRIZ)) {
+			//codigo
 		}
 	}
 	

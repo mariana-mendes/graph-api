@@ -36,22 +36,16 @@ public class API {
 	}
 	
 	public int getVertexNumber(Graph graph){
-	
-		return graph.getVertexes().size();
-		
+		return controller.getVertexNumber(graph);
 	}
 	
 	public int getEdgeNumber(Graph graph){
-		 return graph.getEdges().size();
-		
+		 return controller.getEdgeNumber(graph);	
 	}
 	
 	
-	public float getMeanEdge(){
-		int grade = 0;
-		grade = (2*graph.getEdges().size())/graph.getVertexes().size();
-		return grade;
-		
+	public float getMeanEdge(Graph graph){
+		return controller.getMeanEdge(graph);
 	}
 	
 	public void getshortestpath(int v1, int v2){
