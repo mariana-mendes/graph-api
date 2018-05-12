@@ -35,8 +35,8 @@ public class APITest {
 		}
 
 		Set<Edge> e = graph.getEdges();
-		for (Edge ee : e) {
-			System.out.println(ee.getEdge());
+		for(Edge ee :e) {
+			System.out.println(ee.getEgde());
 		}
 	}
 
