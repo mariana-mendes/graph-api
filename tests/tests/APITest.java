@@ -38,13 +38,15 @@ public class APITest {
 		for(Edge ee :e) {
 			System.out.println(ee.getEgde());
 		}
+		
+		api.graphRepresentation(graph, "AL");
 	}
 
 	@Test
 	public void testGetVertexNumber() {
 
 		graph = api.readGraph("input.txt");
-		Assert.assertEquals(7, api.getVertexNumber(graph));
+		Assert.assertEquals(5, api.getVertexNumber(graph));
 		Assert.assertNotEquals(0, api.getVertexNumber(graph));
 		Assert.assertNotEquals(2, api.getVertexNumber(graph));
 	}
@@ -53,7 +55,7 @@ public class APITest {
 	public void testGetEdgeNumber() {
 
 		graph = api.readGraph("input.txt");
-		Assert.assertEquals(7, api.getVertexNumber(graph));
+		Assert.assertEquals(5, api.getVertexNumber(graph));
 		Assert.assertNotEquals(4, api.getEdgeNumber(graph));
 		Assert.assertNotEquals(0, api.getEdgeNumber(graph));
 

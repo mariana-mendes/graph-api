@@ -8,11 +8,7 @@ public class API {
 	
 	private GraphController controller;
 	
-	private Graph graph;
-	
 	public API() {
-		
-		this.graph = new Graph();
 		this.controller = new GraphController();
 	}
 	
@@ -22,7 +18,6 @@ public class API {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		
 		return null;
 	}
 	
