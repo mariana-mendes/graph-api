@@ -2,6 +2,7 @@ package api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -81,24 +82,23 @@ public class GraphController {
 
 		return graph;
 	}
-	
-	public int getVertexNumber(Graph graph){
-		
+
+	public int getVertexNumber(Graph graph) {
+
 		return graph.getVertexes().size();
-		
+
 	}
-	
-	public int getEdgeNumber(Graph graph){
-		 return graph.getEdges().size();
-		
+
+	public int getEdgeNumber(Graph graph) {
+		return graph.getEdges().size();
+
 	}
-	
-	
-	public float getMeanEdge(Graph graph){
+
+	public float getMeanEdge(Graph graph) {
 		int grade = 0;
-		grade = (2*graph.getEdges().size())/graph.getVertexes().size();
+		grade = (2 * graph.getEdges().size()) / graph.getVertexes().size();
 		return grade;
-		
+
 	}
 
 	private int getGreaterVertex(Graph g) {
@@ -107,16 +107,61 @@ public class GraphController {
 	}
 
 	public void BFS(Graph g, int vertex) {
+
+		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
+		boolean visited[] = new boolean[g.getVertexes().size() + 1];
+		int depht[] = new int[g.getVertexes().size() + 1];
+		int father[] = new int[g.getVertexes().size() + 1];
+		LinkedList<Integer> queue = new LinkedList<Integer>();
+
+		visited[vertex] = true;
+		depht[vertex] = 0;
+		queue.add(vertex);
+
+		while (queue.size() != 0) {
+			vertex = queue.pop();
+			System.out.println(vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]));
+			ArrayList<Integer> turn = adj.get(vertex);
+			int turnVertex;
+			for (int i = 0; i < turn.size(); i++) {
+				turnVertex = turn.get(i);
+				if (!visited[turn.get(i)]) {
+					depht[turnVertex] = depht[vertex] + 1;
+					father[turnVertex] = vertex;
+					visited[turn.get(i)] = true;
+					queue.add(turn.get(i));
+				}
+			}
+		}
+	}
+
+	//TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
+	public void DFS(Graph g, int vertex) {
+		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
+		boolean visited[] = new boolean[g.getVertexes().size() + 1];
+		DFSUtil(vertex, visited, adj);
+	}
+
+	private void DFSUtil(int v, boolean visited[], ArrayList<ArrayList<Integer>> adj) {
+		visited[v] = true;
+		System.out.println(v + " ");
+
+		ArrayList<Integer> turn = adj.get(v);
+		for (Integer vertexTurn : turn) {
+			if (!visited[vertexTurn]) {
+				DFSUtil(vertexTurn, visited, adj);
+				}
+		}
 	}
 
 	public void graphRepresentation(Graph g, String type) {
-		if(type.equals(ADJACENCY_LIST)) {
+		if (type.equals(ADJACENCY_LIST)) {
 			this.printAdjacencyList(g);
-		}else if(type.equals(ADJACENCY_MATRIZ)) {
+		} else if (type.equals(ADJACENCY_MATRIZ)) {
 			this.printAdjacencyMatrix(g);
 		}
 	}
-	
+
 	private void printAdjacencyMatrix(Graph graph) {
 		int[][] adjacencyMatrix = getAdjacencyMatrix(graph);
 		String saida = "";
@@ -124,32 +169,32 @@ public class GraphController {
 			for (int j = 0; j < adjacencyMatrix.length; j++) {
 				saida += Integer.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
 			}
-			
+
 			saida += NOVA_LINHA;
 		}
-		
+
 		System.out.println(saida);
 		System.out.println();
 	}
-	
-	private int[][] getAdjacencyMatrix(Graph graph){
+
+	private int[][] getAdjacencyMatrix(Graph graph) {
 		int[][] adjacencyMatrix = initAdjacencyMatrix(graph);
 		Set<Edge> edges = graph.getEdges();
-		
-		for(Edge e: edges) {
+
+		for (Edge e : edges) {
 			Set<Integer> inputVertexes = e.getEgde().keySet();
-			for(Integer v:inputVertexes) {
+			for (Integer v : inputVertexes) {
 				Integer outputVertexe = e.getEgde().get(v);
 				adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
 				adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1;
 			}
 		}
-		
+
 		return adjacencyMatrix;
 	}
 
 	private int[][] initAdjacencyMatrix(Graph graph) {
-		int[][] adjacencyMatrix = new int[graph.getVertexes().size()+1][graph.getVertexes().size()+1];
+		int[][] adjacencyMatrix = new int[graph.getVertexes().size() + 1][graph.getVertexes().size() + 1];
 		int j = 1;
 		for (int i = 1; i < adjacencyMatrix.length; i++) {
 			adjacencyMatrix[i][0] = j;
@@ -162,7 +207,7 @@ public class GraphController {
 		}
 		return adjacencyMatrix;
 	}
-	
+
 	private void printAdjacencyList(Graph g) {
 		ArrayList<ArrayList<Integer>> list = this.getAdjacencyList(g);
 		ArrayList<Integer> vertexes;
@@ -182,7 +227,7 @@ public class GraphController {
 		int maxVertex = this.getGreaterVertex(g);
 		Set<Integer> vertexes = g.getVertexes();
 		ArrayList<ArrayList<Integer>> adjacency;
-		adjacency = this.fillArrayList(maxVertex);
+		adjacency = this.util.fillArrayList(maxVertex);
 
 		Set<Edge> edges = g.getEdges();
 		Integer valueMap;
@@ -198,20 +243,4 @@ public class GraphController {
 		return adjacency;
 	}
 
-	/**
-	 * Popula um ArrayList com outros ArrayLists vazios, deixando um array no
-	 * formato correto para montar uma lista de adjacencia
-	 * 
-	 * @param maxVertex
-	 *            - número de indices preenchidos por arrayLists
-	 * @return ArrayLists de arrayLists
-	 */
-	private ArrayList<ArrayList<Integer>> fillArrayList(int maxVertex) {
-		ArrayList<ArrayList<Integer>> array = new ArrayList<ArrayList<Integer>>();
-		for (int i = 0; i <= maxVertex; i++) {
-			ArrayList<Integer> empty = new ArrayList<Integer>();
-			array.add(empty);
-		}
-		return array;
-	}
 }
