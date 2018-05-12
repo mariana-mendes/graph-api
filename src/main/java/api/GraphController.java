@@ -1,6 +1,7 @@
 package api;
 
 import java.io.IOException;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public class GraphController {
 	public final static String ESPACO_EM_BRANCO = " ";
 	public final static String ADJACENCY_LIST = "AL";
 	public final static String ADJACENCY_MATRIZ = "AM";
+	public final static String NOVA_LINHA = "\n";
 
 	Util util;
 
@@ -121,33 +123,50 @@ public class GraphController {
 		}
 	}
 	
-	private void printAdjacencyMatrix(Graph g) {
-		int[][] matrizAdjacencia = new int[g.getVertexes().size()+1][g.getVertexes().size()+1];
-		
-		int j = 1;
-		for (int i = 1; i < matrizAdjacencia.length; i++) {
-			matrizAdjacencia[i][0] = j;
-			j++;
+	private void printAdjacencyMatrix(Graph graph) {
+		int[][] adjacencyMatrix = getAdjacencyMatrix(graph);
+		String saida = "";
+		for (int i = 0; i < adjacencyMatrix.length; i++) {
+			for (int j = 0; j < adjacencyMatrix.length; j++) {
+				saida += Integer.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
+			}
+			
+			saida += NOVA_LINHA;
 		}
 		
-		int k = 1;
-		for (int i = 1; i < matrizAdjacencia.length; i++) {
-			matrizAdjacencia[0][k] = k;
-			k++;
-		}
-		
-		
-		Set<Edge> edges = g.getEdges();
+		System.out.println(saida);
+		System.out.println();
+	}
+	
+	private int[][] getAdjacencyMatrix(Graph graph){
+		int[][] adjacencyMatrix = initAdjacencyMatrix(graph);
+		Set<Edge> edges = graph.getEdges();
 		
 		for(Edge e: edges) {
 			Set<Integer> inputVertexes = e.getEgde().keySet();
-			
 			for(Integer v:inputVertexes) {
 				Integer outputVertexe = e.getEgde().get(v);
-				matrizAdjacencia[v.intValue()][outputVertexe.intValue()] = 1;
-				matrizAdjacencia[outputVertexe.intValue()][v.intValue()] = 1;
+				adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
+				adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1;
 			}
 		}
+		
+		return adjacencyMatrix;
+	}
+
+	private int[][] initAdjacencyMatrix(Graph graph) {
+		int[][] adjacencyMatrix = new int[graph.getVertexes().size()+1][graph.getVertexes().size()+1];
+		int j = 1;
+		for (int i = 1; i < adjacencyMatrix.length; i++) {
+			adjacencyMatrix[i][0] = j;
+			j++;
+		}
+		int k = 1;
+		for (int i = 1; i < adjacencyMatrix.length; i++) {
+			adjacencyMatrix[0][k] = k;
+			k++;
+		}
+		return adjacencyMatrix;
 	}
 	
 	private void printAdjacencyList(Graph g) {
