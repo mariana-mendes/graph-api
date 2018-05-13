@@ -36,10 +36,10 @@ public class APITest {
 
 		Set<Edge> e = graph.getEdges();
 		for(Edge ee :e) {
-			System.out.println(ee.getEgde());
+			System.out.println(ee.getEdge());
 		}
 		
-		api.graphRepresentation(graph, "AL");
+		api.graphRepresentation(graph, "AM");
 	}
 
 	@Test

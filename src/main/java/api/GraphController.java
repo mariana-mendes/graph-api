@@ -2,8 +2,10 @@ package api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -15,10 +17,10 @@ public class GraphController {
 	public final static int PRIMEIRA_LINHA = 0;
 	public final static String ESPACO_EM_BRANCO = " ";
 	public final static String ADJACENCY_LIST = "AL";
-	public final static String ADJACENCY_MATRIZ = "AM";
+	public final static String ADJACENCY_MATRIX = "AM";
 	public final static String NOVA_LINHA = "\n";
 
-	Util util;
+	private Util util;
 
 	public GraphController() {
 		util = new Util();
@@ -84,21 +86,17 @@ public class GraphController {
 	}
 
 	public int getVertexNumber(Graph graph) {
-
 		return graph.getVertexes().size();
-
 	}
 
 	public int getEdgeNumber(Graph graph) {
 		return graph.getEdges().size();
-
 	}
 
 	public float getMeanEdge(Graph graph) {
 		int grade = 0;
 		grade = (2 * graph.getEdges().size()) / graph.getVertexes().size();
 		return grade;
-
 	}
 
 	private int getGreaterVertex(Graph g) {
@@ -155,19 +153,19 @@ public class GraphController {
 	}
 
 	public void graphRepresentation(Graph g, String type) {
-		if (type.equals(ADJACENCY_LIST)) {
+		if(type.equalsIgnoreCase(ADJACENCY_LIST)) {
 			this.printAdjacencyList(g);
-		} else if (type.equals(ADJACENCY_MATRIZ)) {
+		} else if(type.equals(ADJACENCY_MATRIX)) {
 			this.printAdjacencyMatrix(g);
 		}
 	}
 
 	private void printAdjacencyMatrix(Graph graph) {
-		int[][] adjacencyMatrix = getAdjacencyMatrix(graph);
+		double[][] adjacencyMatrix = getAdjacencyMatrix(graph);
 		String saida = "";
 		for (int i = 0; i < adjacencyMatrix.length; i++) {
 			for (int j = 0; j < adjacencyMatrix.length; j++) {
-				saida += Integer.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
+				saida += Double.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
 			}
 
 			saida += NOVA_LINHA;
@@ -177,25 +175,43 @@ public class GraphController {
 		System.out.println();
 	}
 
-	private int[][] getAdjacencyMatrix(Graph graph) {
-		int[][] adjacencyMatrix = initAdjacencyMatrix(graph);
-		Set<Edge> edges = graph.getEdges();
-
-		for (Edge e : edges) {
-			Set<Integer> inputVertexes = e.getEgde().keySet();
-			for (Integer v : inputVertexes) {
-				Integer outputVertexe = e.getEgde().get(v);
-				adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
-				adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1;
+	private double[][] getAdjacencyMatrix(Graph graph) {
+		double[][] adjacencyMatrix = initAdjacencyMatrix(graph);
+		try {
+			Set<Edge> edges = graph.getEdges();
+			Set<Integer> vertexes = graph.getVertexes();
+			/*
+			for (Edge e : edges) {
+				Set<Integer> inputVertexes = e.getEdge().keySet();
+				for (Integer v : inputVertexes) {
+					Integer outputVertexe = e.getEdge().get(v);
+					adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
+					adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1;
+				}
+			}*/
+			Integer valueMap;
+			for (Integer vertex : vertexes) {
+				for (Edge edge : edges) {
+					valueMap = edge.getEdge().get(vertex);
+					if (valueMap != null) {
+						Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
+						pair.put(vertex, valueMap);
+						double pesoAresta = edge.getWeight(pair);
+						adjacencyMatrix[vertex-1][valueMap-1] = pesoAresta;
+						adjacencyMatrix[valueMap-1][vertex-1] = pesoAresta;
+					}
+				}
 			}
-		}
 
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return adjacencyMatrix;
 	}
 
-	private int[][] initAdjacencyMatrix(Graph graph) {
-		int[][] adjacencyMatrix = new int[graph.getVertexes().size() + 1][graph.getVertexes().size() + 1];
-		int j = 1;
+	private double[][] initAdjacencyMatrix(Graph graph) {
+		double[][] adjacencyMatrix = new double[graph.getVertexes().size()][graph.getVertexes().size()];
+		/*int j = 1;
 		for (int i = 1; i < adjacencyMatrix.length; i++) {
 			adjacencyMatrix[i][0] = j;
 			j++;
@@ -204,17 +220,17 @@ public class GraphController {
 		for (int i = 1; i < adjacencyMatrix.length; i++) {
 			adjacencyMatrix[0][k] = k;
 			k++;
-		}
+		}*/
 		return adjacencyMatrix;
 	}
 
 	private void printAdjacencyList(Graph g) {
 		ArrayList<ArrayList<Integer>> list = this.getAdjacencyList(g);
 		ArrayList<Integer> vertexes;
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 1; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				System.out.println();
-				System.out.print(i + "-");
+				System.out.print(i + " -");
 				vertexes = list.get(i);
 				for (int j = 0; j < vertexes.size(); j++) {
 					System.out.print(" " + vertexes.get(j));
@@ -233,7 +249,7 @@ public class GraphController {
 		Integer valueMap;
 		for (Integer vertex : vertexes) {
 			for (Edge edge : edges) {
-				valueMap = edge.getEgde().get(vertex);
+				valueMap = edge.getEdge().get(vertex);
 				if (valueMap != null) {
 					adjacency.get(valueMap).add(vertex);
 					adjacency.get(vertex).add(valueMap);
