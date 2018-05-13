@@ -53,7 +53,7 @@ public class Graph {
 			vertexes.add(outputVertexes.get(i));
 			Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
 			pair.put(inputVertexes.get(i), outputVertexes.get(i));
-			Edge e = new Edge(values.get(i), inputVertexes.get(i), outputVertexes.get(i));
+			Edge e = new Edge(inputVertexes.get(i), outputVertexes.get(i), values.get(i));
 			this.edges.add(e);
 		}
 	}
