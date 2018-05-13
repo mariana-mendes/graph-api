@@ -56,4 +56,12 @@ public class API {
 		this.controller.graphRepresentation(g, type);
 	}
 	
+	public void BFS(Graph g, int vertex) {
+		this.controller.BFS(g, vertex);
+	}
+
+	public void DFS(Graph g, int vertex) {
+		this.controller.DFS(g, vertex);
+	}
+	
 }

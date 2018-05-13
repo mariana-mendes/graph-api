@@ -14,7 +14,7 @@ public class Util {
 		File file = new File(path);
 		
 		if(!file.exists()) {
-			throw new IOException("Arquivo não existe.");
+			throw new IOException("Arquivo nï¿½o existe.");
 		}
 		
 		FileReader fileReader = new FileReader(path);
@@ -35,4 +35,20 @@ public class Util {
 		return result;
 	}
 
+	/**
+	 * Popula um ArrayList com outros ArrayLists vazios, deixando um array no
+	 * formato correto para montar uma lista de adjacencia
+	 * 
+	 * @param maxVertex
+	 *            - nÃºmero de indices preenchidos por arrayLists
+	 * @return ArrayLists de arrayLists
+	 */
+	public ArrayList<ArrayList<Integer>> fillArrayList(int maxVertex) {
+		ArrayList<ArrayList<Integer>> array = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i <= maxVertex; i++) {
+			ArrayList<Integer> empty = new ArrayList<Integer>();
+			array.add(empty);
+		}
+		return array;
+	}
 }
