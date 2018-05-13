@@ -28,7 +28,7 @@ public class APITest {
 	@Test
 	public void test() {
 		Graph graph;
-		graph = api.readGraph("input.txt");
+		graph = api.readWeightedGraph("input.txt");
 		Set<Integer> v = graph.getVertexes();
 		for (Integer i : v) {
 			System.out.println(i);
@@ -36,10 +36,10 @@ public class APITest {
 
 		Set<Edge> e = graph.getEdges();
 		for(Edge ee :e) {
-			System.out.println(ee.getEgde());
+			System.out.println(ee.getEdge());
 		}
 		
-		api.graphRepresentation(graph, "AL");
+		api.graphRepresentation(graph, "AM");
 	}
 
 	@Test
