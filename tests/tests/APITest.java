@@ -1,16 +1,10 @@
 package tests;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
 import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import api.API;
-import api.GraphController;
 import graph.Edge;
 import graph.Graph;
 
@@ -28,7 +22,7 @@ public class APITest {
 	@Test
 	public void test() {
 		Graph graph;
-		graph = api.readWeightedGraph("input.txt");
+		graph = api.readGraph("input.txt");
 		Set<Integer> v = graph.getVertexes();
 		for (Integer i : v) {
 			System.out.println(i);
@@ -39,7 +33,7 @@ public class APITest {
 			System.out.println(ee.getEdge());
 		}
 		
-		api.graphRepresentation(graph, "AM");
+		System.out.println(api.graphRepresentation(graph, "AM"));
 	}
 
 	@Test

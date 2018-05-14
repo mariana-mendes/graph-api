@@ -52,8 +52,8 @@ public class API {
 		return 0;
 	}
 	
-	public void graphRepresentation(Graph g,String type) {
-		this.controller.graphRepresentation(g, type);
+	public String graphRepresentation(Graph g,String type) {
+		return this.controller.graphRepresentation(g, type);
 	}
 	
 	public void BFS(Graph g, int vertex) {
