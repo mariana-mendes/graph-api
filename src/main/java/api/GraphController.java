@@ -281,8 +281,14 @@ public class GraphController {
 	        final String template = "%s - %s | %s" + System.lineSeparator();
 
 	        int size = g.getVertexes().size();
-	        int[] parents = initializeParents(size + 1);
 
+	        int[] parents = new int[size+1];
+
+	        for (int i = 0; i < size; i++) {
+	        	parents[i] = -1;
+	        }
+	        
+	        
 	        Edge[] sortedEdges = getEdgesSorted(g.getEdges());
 
 	        int maximumNumberOfEdges = size - 1;
@@ -325,7 +331,6 @@ public class GraphController {
 	        if (parents[v] == -1) {
 	            return v;
 	        }
-
 	        return find(parents, parents[v]);
 	    }
 
@@ -334,15 +339,4 @@ public class GraphController {
 	        int yset = find(parents, y);
 	        parents[xset] = yset;
 	    }
-
-	    private static int[] initializeParents(int size) {
-	        int[] array = new int[size];
-
-	        for (int i = 0; i < size; i++) {
-	            array[i] = -1;
-	        }
-
-	        return array;
-	}
-
 }
