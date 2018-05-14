@@ -133,7 +133,7 @@ public class GraphController {
 		}
 	}
 
-	//TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
+	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
 	public void DFS(Graph g, int vertex) {
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
@@ -148,14 +148,14 @@ public class GraphController {
 		for (Integer vertexTurn : turn) {
 			if (!visited[vertexTurn]) {
 				DFSUtil(vertexTurn, visited, adj);
-				}
+			}
 		}
 	}
 
 	public void graphRepresentation(Graph g, String type) {
-		if(type.equalsIgnoreCase(ADJACENCY_LIST)) {
+		if (type.equalsIgnoreCase(ADJACENCY_LIST)) {
 			this.printAdjacencyList(g);
-		} else if(type.equals(ADJACENCY_MATRIX)) {
+		} else if (type.equals(ADJACENCY_MATRIX)) {
 			this.printAdjacencyMatrix(g);
 		}
 	}
@@ -181,14 +181,11 @@ public class GraphController {
 			Set<Edge> edges = graph.getEdges();
 			Set<Integer> vertexes = graph.getVertexes();
 			/*
-			for (Edge e : edges) {
-				Set<Integer> inputVertexes = e.getEdge().keySet();
-				for (Integer v : inputVertexes) {
-					Integer outputVertexe = e.getEdge().get(v);
-					adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
-					adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1;
-				}
-			}*/
+			 * for (Edge e : edges) { Set<Integer> inputVertexes = e.getEdge().keySet(); for
+			 * (Integer v : inputVertexes) { Integer outputVertexe = e.getEdge().get(v);
+			 * adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
+			 * adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1; } }
+			 */
 			Integer valueMap;
 			for (Integer vertex : vertexes) {
 				for (Edge edge : edges) {
@@ -197,8 +194,8 @@ public class GraphController {
 						Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
 						pair.put(vertex, valueMap);
 						double pesoAresta = edge.getWeight(pair);
-						adjacencyMatrix[vertex-1][valueMap-1] = pesoAresta;
-						adjacencyMatrix[valueMap-1][vertex-1] = pesoAresta;
+						adjacencyMatrix[vertex - 1][valueMap - 1] = pesoAresta;
+						adjacencyMatrix[valueMap - 1][vertex - 1] = pesoAresta;
 					}
 				}
 			}
@@ -211,16 +208,11 @@ public class GraphController {
 
 	private double[][] initAdjacencyMatrix(Graph graph) {
 		double[][] adjacencyMatrix = new double[graph.getVertexes().size()][graph.getVertexes().size()];
-		/*int j = 1;
-		for (int i = 1; i < adjacencyMatrix.length; i++) {
-			adjacencyMatrix[i][0] = j;
-			j++;
-		}
-		int k = 1;
-		for (int i = 1; i < adjacencyMatrix.length; i++) {
-			adjacencyMatrix[0][k] = k;
-			k++;
-		}*/
+		/*
+		 * int j = 1; for (int i = 1; i < adjacencyMatrix.length; i++) {
+		 * adjacencyMatrix[i][0] = j; j++; } int k = 1; for (int i = 1; i <
+		 * adjacencyMatrix.length; i++) { adjacencyMatrix[0][k] = k; k++; }
+		 */
 		return adjacencyMatrix;
 	}
 
@@ -229,12 +221,28 @@ public class GraphController {
 		ArrayList<Integer> vertexes;
 		for (int i = 1; i < list.size(); i++) {
 			if (list.get(i) != null) {
-				System.out.println();
-				System.out.print(i + " -");
+				System.out.print(NOVA_LINHA+i + " -");
 				vertexes = list.get(i);
-				for (int j = 0; j < vertexes.size(); j++) {
-					System.out.print(" " + vertexes.get(j));
+				for (Integer integer : vertexes) {
+				System.out.print(ESPACO_EM_BRANCO + integer );
+					Set<Edge> e = g.getEdges();
+					for (Edge edge : e) {
+						Map<Integer, Integer> v = new HashMap<Integer, Integer>();
+						v.put(i, integer);
+						if((edge.getWeightedEdge().get(v)) != null) {
+							System.out.print( "(" + edge.getWeightedEdge().get(v) +")");
+						}
+						
+						v = new HashMap<Integer,Integer>();
+						v.put(integer, i);
+						if((edge.getWeightedEdge().get(v)) != null) {
+							System.out.print( "(" + edge.getWeightedEdge().get(v) +")");
+						}
+						
+
+					}
 				}
+
 			}
 		}
 	}
