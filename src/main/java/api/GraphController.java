@@ -277,66 +277,66 @@ public class GraphController {
 	}
 
 	public String mst(Graph g) {
-	        StringBuilder sb = new StringBuilder();
-	        final String template = "%s - %s | %s" + System.lineSeparator();
+		String result = "";
+		int size = g.getVertexes().size();
+		int[] parents = new int[size + 1];
+		for (int i = 0; i < size; i++) {
+			parents[i] = -1;
+		}
 
-	        int size = g.getVertexes().size();
+		int[] level = new int[size + 1];
 
-	        int[] parents = new int[size+1];
+		Edge[] sortedEdges = getEdgesSorted(g.getEdges());
 
-	        for (int i = 0; i < size; i++) {
-	        	parents[i] = -1;
-	        }
-	        
-	        
-	        Edge[] sortedEdges = getEdgesSorted(g.getEdges());
+		int maximumNumberOfEdges = size - 1;
+		int edgeIndex = 0;
+		int edgeNumber = 0;
+		level[edgeIndex] = 0;
 
-	        int maximumNumberOfEdges = size - 1;
+		while (edgeNumber < maximumNumberOfEdges) {
 
-	        int edgeIndex = 0;
-	        int edgeNumber = 0;
+			Edge actualEdge = sortedEdges[edgeIndex];
 
-	        while (edgeNumber < maximumNumberOfEdges) {
-	        	
-	        	Edge actualEdge = sortedEdges[edgeIndex];
+			int src = actualEdge.getSrc();
+			int dest = actualEdge.getDest();
 
-	            int src = actualEdge.getSrc();
-	            int dest = actualEdge.getDest();
+			int srcParent = find(parents, src);
+			int destParent = find(parents, dest);
 
-	            int srcParent = find(parents, src);
-	            int destParent = find(parents, dest);
+			boolean belongToSameSubset = (srcParent == destParent);
 
-	            boolean belongToSameSubset = (srcParent == destParent);
+			if (!belongToSameSubset) {
+				edgeNumber++;
+				union(parents, srcParent, destParent);
+				result += src + " "+ dest + " ";
+				result += NOVA_LINHA;
+			}
 
-	            if (!belongToSameSubset) {
-	                edgeNumber++;
-	                union(parents, srcParent, destParent);
-	                sb.append(String.format(template, src, dest, edgeNumber));
-	            }
+			edgeIndex++;
+			if (edgeIndex - 1 == maximumNumberOfEdges) {
+				break;
+			}
+		}
+		return result;
+	}
 
-	            edgeIndex++;
-	            if(edgeIndex-1 == maximumNumberOfEdges) {break;}
-	        }
+	private Edge[] getEdgesSorted(Set<Edge> edges) {
+		Edge[] sortedEdges = edges.toArray(new Edge[edges.size()]);
+		Arrays.sort(sortedEdges);
+		return sortedEdges;
+	}
 
-	        return sb.toString();
-	    }
+	private static int find(int[] parents, int v) {
+		if (parents[v] == -1) {
+			return v;
+		}
+		return find(parents, parents[v]);
+	}
 
-	    private Edge[] getEdgesSorted(Set<Edge> edges) {
-	        Edge[] sortedEdges = edges.toArray(new Edge[edges.size()]);
-	        Arrays.sort(sortedEdges);
-	        return sortedEdges;
-	    }
+	private static void union(int[] parents, int x, int y) {
+		int xset = find(parents, x);
+		int yset = find(parents, y);
+		parents[xset] = yset;
+	}
 
-	    private static int find(int[] parents, int v) {
-	        if (parents[v] == -1) {
-	            return v;
-	        }
-	        return find(parents, parents[v]);
-	    }
-
-	    private static void union(int[] parents, int x, int y) {
-	        int xset = find(parents, x);
-	        int yset = find(parents, y);
-	        parents[xset] = yset;
-	    }
 }
