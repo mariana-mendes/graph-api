@@ -3,6 +3,7 @@ package api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -136,18 +137,22 @@ public class GraphController {
 	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
 	public void DFS(Graph g, int vertex) {
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
+		Set<Integer> vertexes = g.getVertexes();
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
-		DFSUtil(vertex, visited, adj);
+		for (Integer integer : vertexes) {
+			if(!visited[integer]) {
+				DFSUtil(integer, visited, adj);
+			}
+		}
 	}
 
 	private void DFSUtil(int v, boolean visited[], ArrayList<ArrayList<Integer>> adj) {
 		visited[v] = true;
-		System.out.println(v + " ");
-
+		System.out.println(v);
 		ArrayList<Integer> turn = adj.get(v);
 		for (Integer vertexTurn : turn) {
 			if (!visited[vertexTurn]) {
-				DFSUtil(vertexTurn, visited, adj);
+				 DFSUtil(vertexTurn, visited, adj);
 			}
 		}
 	}
@@ -238,11 +243,8 @@ public class GraphController {
 						if((edge.getWeightedEdge().get(v)) != null) {
 							System.out.print( "(" + edge.getWeightedEdge().get(v) +")");
 						}
-						
-
 					}
 				}
-
 			}
 		}
 	}

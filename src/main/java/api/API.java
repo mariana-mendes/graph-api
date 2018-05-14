@@ -61,7 +61,7 @@ public class API {
 	}
 
 	public void DFS(Graph g, int vertex) {
-		this.controller.DFS(g, vertex);
+		 this.controller.DFS(g, vertex);
 	}
 	
 }
