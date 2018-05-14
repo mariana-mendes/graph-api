@@ -105,8 +105,8 @@ public class GraphController {
 		return max;
 	}
 
-	public void BFS(Graph g, int vertex) {
-
+	public String BFS(Graph g, int vertex) {
+		String resultBFS = "";
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
 		int depht[] = new int[g.getVertexes().size() + 1];
@@ -119,7 +119,8 @@ public class GraphController {
 
 		while (queue.size() != 0) {
 			vertex = queue.pop();
-			System.out.println(vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]));
+			resultBFS+= vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]);
+			resultBFS += NOVA_LINHA;
 			ArrayList<Integer> turn = adj.get(vertex);
 			int turnVertex;
 			for (int i = 0; i < turn.size(); i++) {
@@ -127,11 +128,12 @@ public class GraphController {
 				if (!visited[turn.get(i)]) {
 					depht[turnVertex] = depht[vertex] + 1;
 					father[turnVertex] = vertex;
-					visited[turn.get(i)] = true;
+					visited[turnVertex] = true;
 					queue.add(turn.get(i));
 				}
 			}
 		}
+		return resultBFS;
 	}
 
 	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
