@@ -72,9 +72,17 @@ public class APITest {
 	
 	@Test
 	public void testShortestPath() {
-		
+		String caminho;
 		graph = api.readWeightedGraph("input.txt");
-		api.shortestPath(graph, 1, 5);
+		//test input.txt
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 5", caminho);
+		
+		graph = api.readWeightedGraph("input2.txt");
+		//test input2.txt
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 3 5", caminho);
+		
 	}
 
 }
