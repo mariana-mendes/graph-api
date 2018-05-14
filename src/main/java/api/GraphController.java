@@ -2,6 +2,8 @@ package api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,7 +120,7 @@ public class GraphController {
 
 		while (queue.size() != 0) {
 			vertex = queue.pop();
-			resultBFS+= vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]);
+			resultBFS += vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]);
 			resultBFS += NOVA_LINHA;
 			ArrayList<Integer> turn = adj.get(vertex);
 			int turnVertex;
@@ -141,7 +143,7 @@ public class GraphController {
 		Set<Integer> vertexes = g.getVertexes();
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
 		for (Integer integer : vertexes) {
-			if(!visited[integer]) {
+			if (!visited[integer]) {
 				DFSUtil(integer, visited, adj);
 			}
 		}
@@ -153,18 +155,18 @@ public class GraphController {
 		ArrayList<Integer> turn = adj.get(v);
 		for (Integer vertexTurn : turn) {
 			if (!visited[vertexTurn]) {
-				 DFSUtil(vertexTurn, visited, adj);
+				DFSUtil(vertexTurn, visited, adj);
 			}
 		}
 	}
 
 	public String graphRepresentation(Graph g, String type) {
 		if (type.equalsIgnoreCase(ADJACENCY_LIST)) {
-			return printAdjacencyList(g);	
+			return printAdjacencyList(g);
 		} else if (type.equals(ADJACENCY_MATRIX)) {
 			return this.printAdjacencyMatrix(g);
 		}
-		
+
 		return "";
 	}
 
@@ -173,17 +175,17 @@ public class GraphController {
 		String saida = "";
 		for (int i = 0; i < adjacencyMatrix.length; i++) {
 			for (int j = 0; j < adjacencyMatrix.length; j++) {
-				if(adjacencyMatrix[i][j] == 0.0 || adjacencyMatrix[i][j] == 1.0) {
+				if (adjacencyMatrix[i][j] == 0.0 || adjacencyMatrix[i][j] == 1.0) {
 					int result = (int) (adjacencyMatrix[i][j]);
 					saida += Integer.toString(result) + ESPACO_EM_BRANCO;
-				}else {
+				} else {
 					saida += Double.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
 				}
 			}
 
 			saida += NOVA_LINHA;
 		}
-		
+
 		return saida;
 	}
 
@@ -199,17 +201,17 @@ public class GraphController {
 					Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
 					pair.put(vertex, valueMap);
 					Double pesoAresta = edge.getWeightedEdge().get(pair);
-					if(pesoAresta == null) {
+					if (pesoAresta == null) {
 						adjacencyMatrix[vertex - 1][valueMap - 1] = 1;
 						adjacencyMatrix[valueMap - 1][vertex - 1] = 1;
-					}else {
+					} else {
 						adjacencyMatrix[vertex - 1][valueMap - 1] = edge.getWeightedEdge().get(pair);
 						adjacencyMatrix[valueMap - 1][vertex - 1] = edge.getWeightedEdge().get(pair);
 					}
 				}
 			}
 		}
-		
+
 		return adjacencyMatrix;
 	}
 
@@ -229,28 +231,28 @@ public class GraphController {
 		String saida = "";
 		for (int i = 1; i < list.size(); i++) {
 			if (list.get(i) != null) {
-				saida += NOVA_LINHA+i + " -";
+				saida += NOVA_LINHA + i + " -";
 				vertexes = list.get(i);
 				for (Integer integer : vertexes) {
-				saida += ESPACO_EM_BRANCO + integer ;
+					saida += ESPACO_EM_BRANCO + integer;
 					Set<Edge> e = g.getEdges();
 					for (Edge edge : e) {
 						Map<Integer, Integer> v = new HashMap<Integer, Integer>();
 						v.put(i, integer);
-						if((edge.getWeightedEdge().get(v)) != null) {
-							saida += "(" + edge.getWeightedEdge().get(v) +")";
+						if ((edge.getWeightedEdge().get(v)) != null) {
+							saida += "(" + edge.getWeightedEdge().get(v) + ")";
 						}
-						
-						v = new HashMap<Integer,Integer>();
+
+						v = new HashMap<Integer, Integer>();
 						v.put(integer, i);
-						if((edge.getWeightedEdge().get(v)) != null) {
-							saida += "(" + edge.getWeightedEdge().get(v) +")";
+						if ((edge.getWeightedEdge().get(v)) != null) {
+							saida += "(" + edge.getWeightedEdge().get(v) + ")";
 						}
 					}
 				}
 			}
 		}
-		
+
 		return saida;
 	}
 
@@ -272,6 +274,75 @@ public class GraphController {
 			}
 		}
 		return adjacency;
+	}
+
+	public String mst(Graph g) {
+	        StringBuilder sb = new StringBuilder();
+	        final String template = "%s - %s | %s" + System.lineSeparator();
+
+	        int size = g.getVertexes().size();
+	        int[] parents = initializeParents(size + 1);
+
+	        Edge[] sortedEdges = getEdgesSorted(g.getEdges());
+
+	        int maximumNumberOfEdges = size - 1;
+
+	        int edgeIndex = 0;
+	        int edgeNumber = 0;
+
+	        while (edgeNumber < maximumNumberOfEdges) {
+	        	
+	        	Edge actualEdge = sortedEdges[edgeIndex];
+
+	            int src = actualEdge.getSrc();
+	            int dest = actualEdge.getDest();
+
+	            int srcParent = find(parents, src);
+	            int destParent = find(parents, dest);
+
+	            boolean belongToSameSubset = (srcParent == destParent);
+
+	            if (!belongToSameSubset) {
+	                edgeNumber++;
+	                union(parents, srcParent, destParent);
+	                sb.append(String.format(template, src, dest, edgeNumber));
+	            }
+
+	            edgeIndex++;
+	            if(edgeIndex-1 == maximumNumberOfEdges) {break;}
+	        }
+
+	        return sb.toString();
+	    }
+
+	    private Edge[] getEdgesSorted(Set<Edge> edges) {
+	        Edge[] sortedEdges = edges.toArray(new Edge[edges.size()]);
+	        Arrays.sort(sortedEdges);
+	        return sortedEdges;
+	    }
+
+	    private static int find(int[] parents, int v) {
+	        if (parents[v] == -1) {
+	            return v;
+	        }
+
+	        return find(parents, parents[v]);
+	    }
+
+	    private static void union(int[] parents, int x, int y) {
+	        int xset = find(parents, x);
+	        int yset = find(parents, y);
+	        parents[xset] = yset;
+	    }
+
+	    private static int[] initializeParents(int size) {
+	        int[] array = new int[size];
+
+	        for (int i = 0; i < size; i++) {
+	            array[i] = -1;
+	        }
+
+	        return array;
 	}
 
 }
