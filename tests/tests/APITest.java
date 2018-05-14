@@ -39,7 +39,7 @@ public class APITest {
 			System.out.println(ee.getEdge());
 		}
 		
-		api.graphRepresentation(graph, "AM");
+		api.graphRepresentation(graph, "AL");
 	}
 
 	@Test
@@ -68,6 +68,13 @@ public class APITest {
 		Assert.assertEquals(2, api.getMeanEdge(graph), 0);
 		Assert.assertNotEquals(0, api.getMeanEdge(graph));
 		Assert.assertNotEquals(5, api.getMeanEdge(graph));
+	}
+	
+	@Test
+	public void testShortestPath() {
+		
+		graph = api.readWeightedGraph("input.txt");
+		api.shortestPath(2, 4);
 	}
 
 }

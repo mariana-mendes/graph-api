@@ -21,6 +21,7 @@ public class GraphController {
 	public final static String NOVA_LINHA = "\n";
 
 	private Util util;
+	private Graph graph;
 
 	public GraphController() {
 		util = new Util();
@@ -50,7 +51,8 @@ public class GraphController {
 		}
 
 		Graph graph = new Graph(inputVertexes, outputVertexes, numVertexes);
-
+		this.graph = graph;
+		
 		return graph;
 	}
 
@@ -81,7 +83,8 @@ public class GraphController {
 		}
 
 		Graph graph = new Graph(inputVertexes, outputVertexes, values, numVertexes);
-
+		this.graph = graph;
+		
 		return graph;
 	}
 
@@ -180,15 +183,6 @@ public class GraphController {
 		try {
 			Set<Edge> edges = graph.getEdges();
 			Set<Integer> vertexes = graph.getVertexes();
-			/*
-			for (Edge e : edges) {
-				Set<Integer> inputVertexes = e.getEdge().keySet();
-				for (Integer v : inputVertexes) {
-					Integer outputVertexe = e.getEdge().get(v);
-					adjacencyMatrix[v.intValue()][outputVertexe.intValue()] = 1;
-					adjacencyMatrix[outputVertexe.intValue()][v.intValue()] = 1;
-				}
-			}*/
 			Integer valueMap;
 			for (Integer vertex : vertexes) {
 				for (Edge edge : edges) {
@@ -211,16 +205,6 @@ public class GraphController {
 
 	private double[][] initAdjacencyMatrix(Graph graph) {
 		double[][] adjacencyMatrix = new double[graph.getVertexes().size()][graph.getVertexes().size()];
-		/*int j = 1;
-		for (int i = 1; i < adjacencyMatrix.length; i++) {
-			adjacencyMatrix[i][0] = j;
-			j++;
-		}
-		int k = 1;
-		for (int i = 1; i < adjacencyMatrix.length; i++) {
-			adjacencyMatrix[0][k] = k;
-			k++;
-		}*/
 		return adjacencyMatrix;
 	}
 
@@ -257,6 +241,64 @@ public class GraphController {
 			}
 		}
 		return adjacency;
+	}
+
+	public String shortestPath(int v1, int v2) throws Exception{
+		Set<Integer> vertexes = this.graph.getVertexes();
+		if(!vertexes.contains(v1) && !vertexes.contains(v2)) {
+			throw new Exception("Vértices não fazem parte do grafo.");
+		}
+		double[][] dists = floydWarshall(v1, v2);
+		return null;
+	}
+
+	private double[][] floydWarshall(int v1, int v2) {
+		double[][] dists = this.getAdjacencyMatrix(this.graph);
+		int numVertex = dists.length;
+		int[][] next = new int[numVertex][numVertex];
+		Set<Edge> edges = this.graph.getEdges();
+		for (Edge edge : edges) {
+			Integer[] v = edge.getVertexes();
+			next[v[0]-1][v[1]-1] = v[1];
+		}
+		//adjust
+		for(int i = 0; i < numVertex; i++) {
+			for(int j = 0; j < numVertex; j++) {
+				if(i != j && dists[i][j] == 0) {
+					dists[i][j] = Double.POSITIVE_INFINITY;
+				}
+			}
+		}
+		
+		//dp
+		for(int k = 0; k < numVertex; k++) {
+			for(int i = 0; i < numVertex; i++) {
+				for(int j = 0; j < numVertex; j++) {
+					if (dists[i][k] + dists[k][j] < dists[i][j]) {
+						dists[i][j] = dists[i][k] + dists[k][j];
+						next[i][j] = next[i][k];
+					}
+				}
+			}
+		}
+		
+		ArrayList<Integer> ans = path(v1, v2, next);
+		System.out.println(ans);
+		
+		return null;
+	}
+
+	private ArrayList<Integer> path(int v1, int v2, int[][] next) {
+		ArrayList<Integer> path = new ArrayList<>();
+		if(!((v1-1 >= 0 && v1-1 < next.length) && (v2-1 >= 0 && v2-1 < next.length))) {
+			return path;
+		}
+		path.add(v1);
+		while(v1 != v2) {
+			v1 = next[v1-1][v2-1];
+			path.add(v1);
+		}
+		return path;
 	}
 
 }

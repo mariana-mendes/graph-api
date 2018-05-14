@@ -43,8 +43,14 @@ public class API {
 		return controller.getMeanEdge(graph);
 	}
 	
-	public void getshortestpath(int v1, int v2){
-		
+	public String shortestPath(int v1, int v2){
+		String path = null;
+		try {
+			path = controller.shortestPath(v1,v2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return path;
 	}
     
 	private int minDistance(int[] distance, Boolean[] set) {
