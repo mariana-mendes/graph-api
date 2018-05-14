@@ -74,7 +74,7 @@ public class APITest {
 	public void testShortestPath() {
 		
 		graph = api.readWeightedGraph("input.txt");
-		api.shortestPath(1, 5);
+		api.shortestPath(graph, 1, 5);
 	}
 
 }

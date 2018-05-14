@@ -246,56 +246,74 @@ public class GraphController {
 			throw new Exception("Vértices não fazem parte do grafo.");
 		}
 		
-		double[][] dists = floydWarshall(graph, v1, v2);
-		return null;
+		return floydWarshallPath(graph, v1, v2);
 	}
 
-	private double[][] floydWarshall(Graph graph, int v1, int v2) {
-		double[][] dists = this.getAdjacencyMatrix(graph);
-		int numVertex = dists.length;
+	private String floydWarshallPath(Graph graph, int v1, int v2) {
+		
+		double[][] distances = this.getAdjacencyMatrix(graph);
+		int numVertex = distances.length;
 		int[][] next = new int[numVertex][numVertex];
+		
+		//path
 		Set<Edge> edges = graph.getEdges();
 		for (Edge edge : edges) {
 			Integer[] v = edge.getVertexes();
 			next[v[0]-1][v[1]-1] = v[1];
 		}
+		
 		//adjust
-		for(int i = 0; i < numVertex; i++) {
-			for(int j = 0; j < numVertex; j++) {
-				if(i != j && dists[i][j] == 0) {
-					dists[i][j] = Double.POSITIVE_INFINITY;
-				}
-			}
-		}
+		distances = adjustFMMatrix(distances);
 		
 		//dp
 		for(int k = 0; k < numVertex; k++) {
 			for(int i = 0; i < numVertex; i++) {
 				for(int j = 0; j < numVertex; j++) {
-					if (dists[i][k] + dists[k][j] < dists[i][j]) {
-						dists[i][j] = dists[i][k] + dists[k][j];
+					if (distances[i][k] + distances[k][j] < distances[i][j]) {
+						distances[i][j] = distances[i][k] + distances[k][j];
 						next[i][j] = next[i][k];
 					}
 				}
 			}
 		}
 		
-		ArrayList<Integer> ans = path(v1, v2, next);
-		System.out.println(ans);
+		ArrayList<Integer> path = buildPath(v1, v2, next);
+		String ans = path.toString()
+				.replace(",", "")
+				.replace("[", "")
+				.replace("]", "");
 		
-		return null;
+		return ans;
 	}
 
-	private ArrayList<Integer> path(int v1, int v2, int[][] next) {
+	private double[][] adjustFMMatrix(double[][] distances) {
+		
+		int numVertex = distances.length;
+		for(int i = 0; i < numVertex; i++) {
+			for(int j = 0; j < numVertex; j++) {
+				if(i != j && distances[i][j] == 0) {
+					distances[i][j] = Double.POSITIVE_INFINITY;
+				}
+			}
+		}
+		
+		return distances;
+	}
+
+	private ArrayList<Integer> buildPath(int v1, int v2, int[][] next) {
+		
 		ArrayList<Integer> path = new ArrayList<>();
+		//verifica vertices invalidos
 		if(!((v1-1 >= 0 && v1-1 < next.length) && (v2-1 >= 0 && v2-1 < next.length))) {
 			return path;
 		}
+		
 		path.add(v1);
 		while(v1 != v2) {
 			v1 = next[v1-1][v2-1];
 			path.add(v1);
 		}
+		
 		return path;
 	}
 
