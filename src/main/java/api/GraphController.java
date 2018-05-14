@@ -158,11 +158,31 @@ public class GraphController {
 		}
 	}
 
-	public String graphRepresentation(Graph g, String type) {
-		if (type.equalsIgnoreCase(ADJACENCY_LIST)) {
-			return printAdjacencyList(g);	
-		} else if (type.equals(ADJACENCY_MATRIX)) {
-			return this.printAdjacencyMatrix(g);
+
+	public boolean connected(Graph graph) {
+		ArrayList<ArrayList<Integer>> adjMatrix = this.getAdjacencyList(graph);
+		boolean visited[] = new boolean[graph.getVertexes().size() + 1];
+		return isConnected( 0, visited, adjMatrix);
+		
+	}
+		private boolean isConnected(int v, boolean[] visited, ArrayList<ArrayList<Integer>> adjMatrix) {
+		visited[v] = true;
+		boolean connection = true;
+		ArrayList<Integer> turn = adjMatrix.get(v);
+		for (Integer vertex : turn) {
+			if(!visited[vertex]) {
+				connection = false;
+				isConnected(vertex, visited, adjMatrix);
+			}
+			
+		}
+		return connection;
+		}
+	public void graphRepresentation(Graph g, String type) {
+		if(type.equalsIgnoreCase(ADJACENCY_LIST)) {
+			this.printAdjacencyList(g);
+		} else if(type.equals(ADJACENCY_MATRIX)) {
+			this.printAdjacencyMatrix(g);
 		}
 		
 		return "";
