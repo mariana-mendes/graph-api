@@ -21,7 +21,6 @@ public class GraphController {
 	public final static String NOVA_LINHA = "\n";
 
 	private Util util;
-	private Graph graph;
 
 	public GraphController() {
 		util = new Util();
@@ -51,7 +50,6 @@ public class GraphController {
 		}
 
 		Graph graph = new Graph(inputVertexes, outputVertexes, numVertexes);
-		this.graph = graph;
 		
 		return graph;
 	}
@@ -83,7 +81,6 @@ public class GraphController {
 		}
 
 		Graph graph = new Graph(inputVertexes, outputVertexes, values, numVertexes);
-		this.graph = graph;
 		
 		return graph;
 	}
@@ -243,20 +240,21 @@ public class GraphController {
 		return adjacency;
 	}
 
-	public String shortestPath(int v1, int v2) throws Exception{
-		Set<Integer> vertexes = this.graph.getVertexes();
+	public String shortestPath(Graph graph, int v1, int v2) throws Exception{
+		Set<Integer> vertexes = graph.getVertexes();
 		if(!vertexes.contains(v1) && !vertexes.contains(v2)) {
 			throw new Exception("Vértices não fazem parte do grafo.");
 		}
-		double[][] dists = floydWarshall(v1, v2);
+		
+		double[][] dists = floydWarshall(graph, v1, v2);
 		return null;
 	}
 
-	private double[][] floydWarshall(int v1, int v2) {
-		double[][] dists = this.getAdjacencyMatrix(this.graph);
+	private double[][] floydWarshall(Graph graph, int v1, int v2) {
+		double[][] dists = this.getAdjacencyMatrix(graph);
 		int numVertex = dists.length;
 		int[][] next = new int[numVertex][numVertex];
-		Set<Edge> edges = this.graph.getEdges();
+		Set<Edge> edges = graph.getEdges();
 		for (Edge edge : edges) {
 			Integer[] v = edge.getVertexes();
 			next[v[0]-1][v[1]-1] = v[1];

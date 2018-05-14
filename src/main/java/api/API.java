@@ -43,10 +43,10 @@ public class API {
 		return controller.getMeanEdge(graph);
 	}
 	
-	public String shortestPath(int v1, int v2){
+	public String shortestPath(Graph g, int v1, int v2){
 		String path = null;
 		try {
-			path = controller.shortestPath(v1,v2);
+			path = controller.shortestPath(g,v1,v2);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
