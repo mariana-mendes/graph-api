@@ -3,7 +3,6 @@ package api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +135,7 @@ public class GraphController {
 		return resultBFS;
 	}
 
-	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
+	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE E RETORNAR STRING
 	public void DFS(Graph g, int vertex) {
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
 		Set<Integer> vertexes = g.getVertexes();
