@@ -2,12 +2,11 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import api.API;
-import graph.Edge;
 import graph.Graph;
 
 public class APITest {
@@ -18,30 +17,13 @@ public class APITest {
 	@Before
 	public void TestAPI() {
 		api = new API();
-		graph = api.readGraph("input.txt");
-	}
-
-	@Test
-	public void test() {
-		Graph graph;
-		graph = api.readGraph("input.txt");
-		Set<Integer> v = graph.getVertexes();
-		for (Integer i : v) {
-			System.out.println(i);
-		}
-
-		Set<Edge> e = graph.getEdges();
-		for (Edge ee : e) {
-			System.out.println(ee.getEdge());
-		}
-
-		System.out.println(api.graphRepresentation(graph, "AM"));
+		graph = new Graph();
 	}
 
 	@Test
 	public void testGetVertexNumber() {
 
-		graph = api.readGraph("input.txt");
+		graph = api.readGraph("input3.txt");
 		Assert.assertEquals(5, api.getVertexNumber(graph));
 		Assert.assertNotEquals(0, api.getVertexNumber(graph));
 		Assert.assertNotEquals(2, api.getVertexNumber(graph));
@@ -50,7 +32,7 @@ public class APITest {
 	@Test
 	public void testGetEdgeNumber() {
 
-		graph = api.readGraph("input.txt");
+		graph = api.readGraph("input3.txt");
 		Assert.assertEquals(5, api.getVertexNumber(graph));
 		Assert.assertNotEquals(4, api.getEdgeNumber(graph));
 		Assert.assertNotEquals(0, api.getEdgeNumber(graph));
@@ -60,44 +42,109 @@ public class APITest {
 	@Test
 	public void testGetMeanEdge() {
 
-		// graph = api.readGraph("input.txt");
+		graph = api.readGraph("input.txt");
 		Assert.assertEquals(2, api.getMeanEdge(graph), 0);
 		Assert.assertNotEquals(0, api.getMeanEdge(graph));
 		Assert.assertNotEquals(5, api.getMeanEdge(graph));
 	}
 
 	@Test
-	public void testGraphRepresentationList() {
-		// // 1 2
-		//
-		// // 2 5 2
-		// // 5 3 / \
-		// 1---5
-		// // 4 5 / \
-		// 1 5 4 3
-		String list = System.lineSeparator();
-		list += "1 - 5 2" + System.lineSeparator();
-		list += "2 - 1 5" + System.lineSeparator();
-		list += "3 - 5" + System.lineSeparator();
-		list += "4 - 5" + System.lineSeparator();
+	public void testShortestPath() {
+		String caminho;
+		graph = api.readGraph("input3.txt");
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 5", caminho);
+		
+		graph = api.readWeightedGraph("input4.txt");
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 5", caminho);
+
+		graph = api.readWeightedGraph("input2.txt");
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 3 5", caminho);
+
+	}
+
+	@Test
+	public void testGraphRepresentation() {
+		Graph g;
+		String adjList, adjMatrix;
+		
+		String list = "\n";
+		list += "1 - 5 2" + "\n";
+		list += "2 - 1 5" + "\n";
+		list += "3 - 5" + "\n";
+		list += "4 - 5" + "\n";
 		list += "5 - 1 2 4 3";
-		System.out.println(api.graphRepresentation(graph, "AL"));
-		assertEquals(list, api.graphRepresentation(graph, "AL"));
+		
+		String matrix = "";
+		matrix += "  1 2 3 4 5" + "\n";
+		matrix += "1 0 1 0 0 1" + "\n";
+		matrix += "2 1 0 0 0 1" + "\n";
+		matrix += "3 0 0 0 0 1" + "\n";
+		matrix += "4 0 0 0 0 1" + "\n";
+		matrix += "5 1 1 1 1 0";
+		
+		g = api.readGraph("input3.txt");
+		adjList = api.graphRepresentation(g, "AL");
+		assertEquals(list, adjList);
+		
+		adjMatrix = api.graphRepresentation(g, "AM");
+		assertEquals(matrix, adjMatrix);
 	}
 
 	@Test
 	public void testBFS() {
-	//		 2     -------  0
-	//      / \
-	//     1---5   -------  1
-	//        / \
-	//       4   3 -------  2
-	String bfsResult = "2 - 0 - " +System.lineSeparator()+
-					   "1 - 1 - 2" + System.lineSeparator()+
-					   "5 - 1 - 2" + System.lineSeparator()+
-					   "4 - 2 - 5" + System.lineSeparator()+
-					   "3 - 2 - 5" + System.lineSeparator();
-	assertEquals(bfsResult, api.BFS(graph, 2));
+		// 2 ------- 0
+		// / \
+		// 1---5 ------- 1
+		// / \
+		// 4 3 ------- 2
+		//String bfsResult = "2 - 0 - " + System.lineSeparator() + "1 - 1 - 2" + System.lineSeparator() + "5 - 1 - 2"
+				//+ System.lineSeparator() + "4 - 2 - 5" + System.lineSeparator() + "3 - 2 - 5" + System.lineSeparator();
+		//assertEquals(bfsResult, api.BFS(api.readGraph("input.txt"), 2));
+		
+		String result = "1 - 0 -\n" + 
+				"2 - 1 1\n" + 
+				"3 - 2 5\n" + 
+				"4 - 2 5\n" + 
+				"5 - 1 1\n";
+		assertEquals(result, api.BFS(api.readGraph("input3.txt"), 1));
+	}
+	
+	@Test
+	public void testDFS() {
+		String result = "1 - 1 5\n" + 
+				"2 - 2 1\n" + 
+				"3 - 1 5\n" + 
+				"4 - 1 5\n" + 
+				"5 - 0 -\n";
+		assertEquals(result, api.DFS(api.readGraph("input3.txt"), 5));
+	}
+
+	@Test
+	public void testConnectedGraph() {
+		graph = api.readGraph("input.txt");
+		Assert.assertTrue(api.connected(graph));
+	}
+	@Test
+	public void MstTest() {
+		String result = "4 - 0 - 0\n"
+				+ "3 - 1 - 4\n"
+				+ "2 - 2 - 3\n"
+				+ "1 - 3 - 2\n"
+				;
+		
+		String result2 = "5 - 0 - 0\n"
+				+ "2 - 1 - 5\n"
+				+ "4 - 1 - 5\n"
+				+ "1 - 2 - 2\n"
+				+ "3 - 2 - 4\n";
+		//graph = api.readWeightedGraph("input5.txt");
+		graph = api.readWeightedGraph("input4.txt");
+		assertEquals(result2, api.MST(graph));
+		//assertEquals(result, api.MST(graph));
+		
 	}
 
 }
