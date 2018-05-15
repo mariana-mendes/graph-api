@@ -77,10 +77,13 @@ public class Graph {
 	
 	private void buildVertexes(int numVertexes) {
 		if(this.vertexes.size() < numVertexes) {
-			int n = numVertexes - vertexes.size();
-			
-			for(int i = 0; i < n; i ++) {
-				vertexes.add(vertexes.size() + 1);
+			int j = 1;
+			for(int i = 0; i < numVertexes; i ++) {
+				if(!vertexes.contains(j)) {
+					vertexes.add(j);
+				}
+				
+				j++;
 			}
 		}
 	}

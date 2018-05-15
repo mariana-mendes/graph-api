@@ -112,16 +112,17 @@ public class GraphController {
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
 		int depht[] = new int[g.getVertexes().size() + 1];
 		int father[] = new int[g.getVertexes().size() + 1];
+		int vertexesVisited[] =  new int[g.getVertexes().size() + 1];
 		LinkedList<Integer> queue = new LinkedList<Integer>();
 
 		visited[vertex] = true;
 		depht[vertex] = 0;
 		queue.add(vertex);
+		vertexesVisited[vertex] = vertex;
 
 		while (queue.size() != 0) {
 			vertex = queue.pop();
-			resultBFS += vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]);
-			resultBFS += NOVA_LINHA;
+			vertexesVisited[vertex] = vertex;
 			ArrayList<Integer> turn = adj.get(vertex);
 			int turnVertex;
 			for (int i = 0; i < turn.size(); i++) {
@@ -134,6 +135,13 @@ public class GraphController {
 				}
 			}
 		}
+		
+		int n = g.getVertexes().size() + 1;
+		for (int j = 1; j < n; j++) {
+			resultBFS += vertexesVisited[j] + " - " + depht[j] + " " + ((father[j] == 0 ? "-" : father[j]));
+			resultBFS += NOVA_LINHA;
+		}
+		
 		return resultBFS;
 	}
 
@@ -320,22 +328,15 @@ public class GraphController {
 	}
 
 	private String floydWarshallPath(Graph graph, int v1, int v2) {
-
 		double[][] distances = this.getAdjacencyMatrix(graph);
 		int numVertex = distances.length;
 		int[][] next = new int[numVertex][numVertex];
-
-		// path
 		Set<Edge> edges = graph.getEdges();
 		for (Edge edge : edges) {
 			Integer[] v = edge.getVertexes();
 			next[v[0] - 1][v[1] - 1] = v[1];
 		}
-
-		// adjust
 		distances = adjustFMMatrix(distances);
-
-		// dp
 		for (int k = 0; k < numVertex; k++) {
 			for (int i = 0; i < numVertex; i++) {
 				for (int j = 0; j < numVertex; j++) {
@@ -370,7 +371,6 @@ public class GraphController {
 	private ArrayList<Integer> buildPath(int v1, int v2, int[][] next) {
 
 		ArrayList<Integer> path = new ArrayList<>();
-		// verifica vertices invalidos
 		if (!((v1 - 1 >= 0 && v1 - 1 < next.length) && (v2 - 1 >= 0 && v2 - 1 < next.length))) {
 			return path;
 		}
