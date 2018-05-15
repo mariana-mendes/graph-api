@@ -172,22 +172,24 @@ public class GraphController {
 	public boolean connected(Graph graph) {
 		ArrayList<ArrayList<Integer>> adjMatrix = this.getAdjacencyList(graph);
 		boolean visited[] = new boolean[graph.getVertexes().size() + 1];
-		return isConnected(0, visited, adjMatrix);
-
+		isConnected(1, visited, adjMatrix);
+		for (int i = 0; i < visited.length; i++) {
+			if(visited[i] = false) {
+				return false;
+			}
+		}
+		return true;
 	}
 
-	private boolean isConnected(int v, boolean[] visited, ArrayList<ArrayList<Integer>> adjMatrix) {
+	private void isConnected(int v, boolean[] visited, ArrayList<ArrayList<Integer>> adjMatrix) {
 		visited[v] = true;
-		boolean connection = true;
 		ArrayList<Integer> turn = adjMatrix.get(v);
 		for (Integer vertex : turn) {
 			if (!visited[vertex]) {
-				connection = false;
 				isConnected(vertex, visited, adjMatrix);
 			}
-
-		}
-		return connection;
+		} 
+		
 	}
 
 	public String graphRepresentation(Graph g, String type) {
