@@ -66,8 +66,8 @@ public class API {
 		return this.controller.BFS(g, vertex);
 	}
 
-	public void DFS(Graph g, int vertex) {
-		this.controller.DFS(g, vertex);
+	public String DFS(Graph g, int vertex) {
+		return this.controller.DFS(g, vertex);
 	}
 
 	public String MST(Graph g) {

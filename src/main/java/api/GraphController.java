@@ -137,21 +137,34 @@ public class GraphController {
 		return resultBFS;
 	}
 
-	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
-	public void DFS(Graph g, int vertex) {
+	public String DFS(Graph g, int vertex) {
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
-		boolean visited[] = new boolean[g.getVertexes().size() + 1];
-		DFSUtil(vertex, visited, adj);
+		int n = g.getVertexes().size()+1;
+		boolean visited[] = new boolean[n];
+		int depht[] = new int[n];
+		int father[] = new int[n];
+		int vertexesVisited[] =  new int[n];
+		int i = 0;
+		DFSUtil(vertex, visited, adj, depht, father, vertexesVisited, i);
+		
+		String saida = "";
+		for (int j = 1; j < n; j++) {
+			saida += vertexesVisited[j] + " - " + depht[j] + " " + ((father[j] == 0 ? "-" : father[j]));
+			saida += NOVA_LINHA;
+		}
+		return saida;
 	}
 
-	private void DFSUtil(int v, boolean visited[], ArrayList<ArrayList<Integer>> adj) {
+	private void DFSUtil(int v, boolean visited[], ArrayList<ArrayList<Integer>> adj, int[] depht, int[] father, int vertexesVisited[], int i) {
 		visited[v] = true;
-		System.out.println(v + " ");
-
+		vertexesVisited[v] = v;
+		i++;
 		ArrayList<Integer> turn = adj.get(v);
 		for (Integer vertexTurn : turn) {
 			if (!visited[vertexTurn]) {
-				DFSUtil(vertexTurn, visited, adj);
+				depht[vertexTurn] = depht[v] + 1;
+				father[vertexTurn] = v;
+				DFSUtil(vertexTurn, visited, adj, depht, father, vertexesVisited, i);
 			}
 		}
 	}
