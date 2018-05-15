@@ -2,6 +2,7 @@ package api;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -244,7 +245,7 @@ public class GraphController {
 	public String shortestPath(Graph graph, int v1, int v2) throws Exception{
 		Set<Integer> vertexes = graph.getVertexes();
 		if(!vertexes.contains(v1) && !vertexes.contains(v2)) {
-			throw new Exception("Vértices não fazem parte do grafo.");
+			throw new Exception("Vï¿½rtices nï¿½o fazem parte do grafo.");
 		}
 		
 		return floydWarshallPath(graph, v1, v2);
@@ -317,5 +318,69 @@ public class GraphController {
 		
 		return path;
 	}
+	
+	public String mst(Graph g) {
+		String result = "";
+		int size = g.getVertexes().size();
+		int[] parents = new int[size + 1];
+		for (int i = 0; i < size; i++) {
+			parents[i] = -1;
+		}
+
+		int[] level = new int[size + 1];
+
+		Edge[] sortedEdges = getEdgesSorted(g.getEdges());
+
+		int maximumNumberOfEdges = size - 1;
+		int edgeIndex = 0;
+		int edgeNumber = 0;
+		level[edgeIndex] = 0;
+
+		while (edgeNumber < maximumNumberOfEdges) {
+
+			Edge actualEdge = sortedEdges[edgeIndex];
+
+			int src = actualEdge.getSrc();
+			int dest = actualEdge.getDest();
+
+			int srcParent = find(parents, src);
+			int destParent = find(parents, dest);
+
+			boolean belongToSameSubset = (srcParent == destParent);
+
+			if (!belongToSameSubset) {
+				edgeNumber++;
+				union(parents, srcParent, destParent);
+				result += src + " "+ dest + " ";
+				result += NOVA_LINHA;
+			}
+
+			edgeIndex++;
+			if (edgeIndex - 1 == maximumNumberOfEdges) {
+				break;
+			}
+		}
+		return result;
+	}
+
+	private Edge[] getEdgesSorted(Set<Edge> edges) {
+		Edge[] sortedEdges = edges.toArray(new Edge[edges.size()]);
+		Arrays.sort(sortedEdges);
+		return sortedEdges;
+	}
+
+	private static int find(int[] parents, int v) {
+		if (parents[v] == -1) {
+			return v;
+		}
+		return find(parents, parents[v]);
+	}
+
+	private static void union(int[] parents, int x, int y) {
+		int xset = find(parents, x);
+		int yset = find(parents, y);
+		parents[xset] = yset;
+	}
+
 
 }

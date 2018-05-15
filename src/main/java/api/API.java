@@ -69,5 +69,9 @@ public class API {
 	public void DFS(Graph g, int vertex) {
 		this.controller.DFS(g, vertex);
 	}
+
+	public String MST(Graph g) {
+		return this.controller.mst(g);
+	}
 	
 }
