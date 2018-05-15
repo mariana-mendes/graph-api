@@ -66,7 +66,7 @@ public class APITest {
 	}
 
 	@Test
-	public void testGraphRepresentation() {
+	public void testGraphRepresentationSemPeso() {
 		Graph g;
 		String adjList, adjMatrix;
 		
@@ -88,6 +88,34 @@ public class APITest {
 		g = api.readGraph("input3.txt");
 		adjList = api.graphRepresentation(g, "AL");
 		assertEquals(list, adjList);
+		
+		adjMatrix = api.graphRepresentation(g, "AM");
+		assertEquals(matrix, adjMatrix);
+	}
+	
+	@Test
+	public void testGraphRepresentationComPeso() {
+		Graph g;
+		String adjList, adjMatrix;
+		
+		String list = "\n";
+		list += "1 - 5 2" + "\n";
+		list += "2 - 1 5" + "\n";
+		list += "3 - 5" + "\n";
+		list += "4 - 5" + "\n";
+		list += "5 - 1 2 4 3";
+		
+		String matrix = "";
+		matrix += "  1 2 3 4 5" + "\n";
+		matrix += "1 0 0.1 0 0 1" + "\n";
+		matrix += "2 0.1 0 0 0 0.2" + "\n";
+		matrix += "3 0 0 0 -9.5 5" + "\n";
+		matrix += "4 0 0 -9.5 0 2.3" + "\n";
+		matrix += "5 1 0.2 5 2.3 0";
+		
+		g = api.readWeightedGraph("input4.txt");
+		//adjList = api.graphRepresentation(g, "AL");
+		//assertEquals(list, adjList);
 		
 		adjMatrix = api.graphRepresentation(g, "AM");
 		assertEquals(matrix, adjMatrix);

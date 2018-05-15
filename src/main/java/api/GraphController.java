@@ -225,7 +225,8 @@ public class GraphController {
 		for (int i = 0; i < adjacencyMatrix.length; i++) {
 			saida += (i+1) + ESPACO_EM_BRANCO;
 			for (int j = 0; j < adjacencyMatrix.length; j++) {
-				if (adjacencyMatrix[i][j] == 0.0 || adjacencyMatrix[i][j] == 1.0) {
+
+				if(adjacencyMatrix[i][j] - (int) adjacencyMatrix[i][j] == 0) {
 					int result = (int) (adjacencyMatrix[i][j]);
 					saida += Integer.toString(result) + ESPACO_EM_BRANCO;
 				} else {
@@ -236,7 +237,6 @@ public class GraphController {
 			saida += NOVA_LINHA;
 		}
 		saida = saida.substring(0, saida.length() - 1);
-		System.out.println(saida);
 		return saida;
 	}
 
