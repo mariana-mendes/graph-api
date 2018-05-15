@@ -85,4 +85,30 @@ public class APITest {
 		
 	}
 
+	@Test
+	public void testGraphRepresentationList() {
+		String list = System.lineSeparator();
+		list += "1 - 5 2" + System.lineSeparator();
+		list += "2 - 1 5" + System.lineSeparator();
+		list += "3 - 5" + System.lineSeparator();
+		list += "4 - 5" + System.lineSeparator();
+		list += "5 - 1 2 4 3";
+		assertEquals(list, api.graphRepresentation(api.readGraph("input.txt"), "AL"));
+	}
+
+	@Test
+	public void testBFS() {
+	//		 2     -------  0
+	//      / \
+	//     1---5   -------  1
+	//        / \
+	//       4   3 -------  2
+	String bfsResult = "2 - 0 - " +System.lineSeparator()+
+					   "1 - 1 - 2" + System.lineSeparator()+
+					   "5 - 1 - 2" + System.lineSeparator()+
+					   "4 - 2 - 5" + System.lineSeparator()+
+					   "3 - 2 - 5" + System.lineSeparator();
+	assertEquals(bfsResult, api.BFS(api.readGraph("input.txt"), 2));
+	}
+
 }
