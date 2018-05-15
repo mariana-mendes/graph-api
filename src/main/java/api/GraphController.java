@@ -261,7 +261,7 @@ public class GraphController {
 		ArrayList<ArrayList<Integer>> list = this.getAdjacencyList(g);
 		ArrayList<Integer> vertexes;
 		String saida = "";
-		for (int i = 1; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				saida += NOVA_LINHA + i + " -";
 				vertexes = list.get(i);
@@ -384,6 +384,37 @@ public class GraphController {
 		return path;
 	}
 
+	
+	private String BFS(Graph g, int vertex, int[] depth) {
+		String resultBFS = "";
+		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
+		boolean visited[] = new boolean[g.getVertexes().size() + 1];
+		int father[] = new int[g.getVertexes().size() + 1];
+		LinkedList<Integer> queue = new LinkedList<Integer>();
+
+		visited[vertex] = true;
+		depth[vertex] = 0;
+		queue.add(vertex);
+		
+		while (queue.size() != 0) {
+			vertex = queue.pop();
+			resultBFS += vertex + " - " + depth[vertex] + " - " + father[vertex];
+			resultBFS += NOVA_LINHA;
+			ArrayList<Integer> turn = adj.get(vertex);
+			int turnVertex;
+			for (int i = 0; i < turn.size(); i++) {
+				turnVertex = turn.get(i);
+				if (!visited[turn.get(i)]) {
+					depth[turnVertex] = depth[vertex] + 1;
+					father[turnVertex] = vertex;
+					visited[turnVertex] = true;
+					queue.add(turn.get(i));
+				}
+			}
+		}
+		return resultBFS;
+	}
+
 	public String mst(Graph g) {
 		String result = "";
 		int size = g.getVertexes().size();
@@ -392,14 +423,14 @@ public class GraphController {
 			parents[i] = -1;
 		}
 
-		int[] level = new int[size + 1];
+		ArrayList<Integer> input = new ArrayList<>();
+		ArrayList<Integer> output = new ArrayList<>();
 
 		Edge[] sortedEdges = getEdgesSorted(g.getEdges());
 
 		int maximumNumberOfEdges = size - 1;
 		int edgeIndex = 0;
 		int edgeNumber = 0;
-		level[edgeIndex] = 0;
 
 		while (edgeNumber < maximumNumberOfEdges) {
 
@@ -411,11 +442,14 @@ public class GraphController {
 			int srcParent = find(parents, src);
 			int destParent = find(parents, dest);
 
+			
 			boolean belongToSameSubset = (srcParent == destParent);
 
 			if (!belongToSameSubset) {
 				edgeNumber++;
 				union(parents, srcParent, destParent);
+				input.add(src);
+				output.add(dest);
 				result += src + " " + dest + " ";
 				result += NOVA_LINHA;
 			}
@@ -425,7 +459,17 @@ public class GraphController {
 				break;
 			}
 		}
-		return result;
+		int root = -1;
+		Graph graph = new Graph(input,output,size);
+		Set<Integer> v = graph.getVertexes();
+		for (Integer integer : v) {
+			root = integer;
+		}
+		int[] depth = new int[this.getGreaterVertex(graph)+1];
+
+		return this.BFS(graph, root, depth);
+
+		
 	}
 
 	private Edge[] getEdgesSorted(Set<Edge> edges) {

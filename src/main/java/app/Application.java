@@ -9,10 +9,13 @@ public class Application {
 	//	String ss = a.BFS(a.readWeightedGraph("./input.txt"), 1);
 	//	System.out.println(ss);
 	//	a.graphRepresentation(a.readGraph("./input.txt"), "AL");
-		System.out.println(a.DFS(a.readGraph("./input.txt"), 5));
-		//a.graphRepresentation(a.readGraph("./input.txt"), "AL");
-		//String b = a.MST(a.readWeightedGraph("./input.txt"));
-		//System.out.println(b);
+	//	System.out.println(a.DFS(a.readGraph("./input.txt"), 5));
+
+		
+	   String b =   a.MST(a.readWeightedGraph("./input.txt"));
+	     System.out.println(b);
+//		String b = a.MST(a.readGraph("./input.txt"));
+//		System.out.println(b);
 	}
 
 }
