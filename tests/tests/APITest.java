@@ -128,9 +128,6 @@ public class APITest {
 		// 1---5 ------- 1
 		// / \
 		// 4 3 ------- 2
-		//String bfsResult = "2 - 0 - " + System.lineSeparator() + "1 - 1 - 2" + System.lineSeparator() + "5 - 1 - 2"
-				//+ System.lineSeparator() + "4 - 2 - 5" + System.lineSeparator() + "3 - 2 - 5" + System.lineSeparator();
-		//assertEquals(bfsResult, api.BFS(api.readGraph("input.txt"), 2));
 		
 		String result = "1 - 0 -\n" + 
 				"2 - 1 1\n" + 
