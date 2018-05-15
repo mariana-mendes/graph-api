@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Edge {
 
-	private final static double VALUE_DEFAULT = 1;
+	private final static Double VALUE_DEFAULT = null;
 
 	private Map<Map<Integer, Integer>, Double> edge;
 
@@ -21,7 +21,7 @@ public class Edge {
 		Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
 		pair.put(vertex1, vertex2);
 		this.edge = new HashMap<Map<Integer, Integer>, Double>();
-		this.edge.put(pair, value);
+		this.edge.put(pair, new Double(value) );
 	}
 
 	public Map<Map<Integer, Integer>, Double> getWeightedEdge(){
