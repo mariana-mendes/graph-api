@@ -60,6 +60,14 @@ public class Edge implements Comparable<Edge> {
 		}
 		return this.edge.get(e);
 	}
+	
+	public Integer[] getVertexes() {
+		Map<Integer, Integer> e = this.getEdge();
+		Integer v1 = (Integer) e.keySet().toArray()[0];
+		Integer v2 = e.get(v1);
+		Integer[] v = {v1,v2};
+		return v;
+	}
 
 	public int getSrc() {
 		return src;

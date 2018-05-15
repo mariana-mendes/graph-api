@@ -43,8 +43,14 @@ public class API {
 		return controller.getMeanEdge(graph);
 	}
 	
-	public void getshortestpath(int v1, int v2){
-		
+	public String shortestPath(Graph g, int v1, int v2){
+		String path = null;
+		try {
+			path = controller.shortestPath(g,v1,v2);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return path;
 	}
     
 	private int minDistance(int[] distance, Boolean[] set) {
@@ -52,18 +58,18 @@ public class API {
 		return 0;
 	}
 	
-	public String graphRepresentation(Graph g,String type) {
-		return this.controller.graphRepresentation(g, type);
+	public void graphRepresentation(Graph g,String type) {
+		this.controller.graphRepresentation(g, type);
 	}
 	
-	public String BFS(Graph g, int vertex) {
-		return this.controller.BFS(g, vertex);
+	public void BFS(Graph g, int vertex) {
+		this.controller.BFS(g, vertex);
 	}
 
 	public void DFS(Graph g, int vertex) {
-		 this.controller.DFS(g, vertex);
+		this.controller.DFS(g, vertex);
 	}
-	
+
 	public String MST(Graph g) {
 		return this.controller.mst(g);
 	}
