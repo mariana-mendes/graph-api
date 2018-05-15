@@ -3,6 +3,7 @@ package api;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -321,7 +322,9 @@ public class GraphController {
 				valueMap = edge.getEdge().get(vertex);
 				if (valueMap != null) {
 					adjacency.get(valueMap).add(vertex);
+					Collections.sort(adjacency.get(valueMap));
 					adjacency.get(vertex).add(valueMap);
+					Collections.sort(adjacency.get(vertex));
 				}
 			}
 		}

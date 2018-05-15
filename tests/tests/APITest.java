@@ -71,11 +71,11 @@ public class APITest {
 		String adjList, adjMatrix;
 		
 		String list = "\n";
-		list += "1 - 5 2" + "\n";
+		list += "1 - 2 5" + "\n";
 		list += "2 - 1 5" + "\n";
 		list += "3 - 5" + "\n";
 		list += "4 - 5" + "\n";
-		list += "5 - 1 2 4 3";
+		list += "5 - 1 2 3 4";
 		
 		String matrix = "";
 		matrix += "  1 2 3 4 5" + "\n";
