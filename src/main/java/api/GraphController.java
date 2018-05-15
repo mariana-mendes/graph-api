@@ -213,7 +213,17 @@ public class GraphController {
 	private String printAdjacencyMatrix(Graph graph) {
 		double[][] adjacencyMatrix = getAdjacencyMatrix(graph);
 		String saida = "";
+		for (int i = 0; i <= adjacencyMatrix.length; i++) {
+			if(i == 0) {
+				saida += " " + ESPACO_EM_BRANCO;
+			} else {
+				saida += i + ESPACO_EM_BRANCO;
+			}
+		}
+		saida = saida.substring(0, saida.length() - 1);
+		saida += NOVA_LINHA;
 		for (int i = 0; i < adjacencyMatrix.length; i++) {
+			saida += (i+1) + ESPACO_EM_BRANCO;
 			for (int j = 0; j < adjacencyMatrix.length; j++) {
 				if (adjacencyMatrix[i][j] == 0.0 || adjacencyMatrix[i][j] == 1.0) {
 					int result = (int) (adjacencyMatrix[i][j]);
@@ -222,10 +232,11 @@ public class GraphController {
 					saida += Double.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
 				}
 			}
-
+			saida = saida.substring(0, saida.length() - 1);
 			saida += NOVA_LINHA;
 		}
-
+		saida = saida.substring(0, saida.length() - 1);
+		System.out.println(saida);
 		return saida;
 	}
 

@@ -77,9 +77,20 @@ public class APITest {
 		list += "4 - 5" + "\n";
 		list += "5 - 1 2 4 3";
 		
+		String matrix = "";
+		matrix += "  1 2 3 4 5" + "\n";
+		matrix += "1 0 1 0 0 1" + "\n";
+		matrix += "2 1 0 0 0 1" + "\n";
+		matrix += "3 0 0 0 0 1" + "\n";
+		matrix += "4 0 0 0 0 1" + "\n";
+		matrix += "5 1 1 1 1 0";
+		
 		g = api.readGraph("input3.txt");
 		adjList = api.graphRepresentation(g, "AL");
 		assertEquals(list, adjList);
+		
+		adjMatrix = api.graphRepresentation(g, "AM");
+		assertEquals(matrix, adjMatrix);
 	}
 
 	@Test
