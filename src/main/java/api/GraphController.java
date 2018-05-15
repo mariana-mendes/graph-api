@@ -292,13 +292,21 @@ public class GraphController {
 						Map<Integer, Integer> v = new HashMap<Integer, Integer>();
 						v.put(i, integer);
 						if ((edge.getWeightedEdge().get(v)) != null) {
-							saida += "(" + edge.getWeightedEdge().get(v) + ")";
+							if(edge.getWeightedEdge().get(v) - edge.getWeightedEdge().get(v).intValue() == 0) {
+								saida += "(" + edge.getWeightedEdge().get(v).intValue() + ")";
+							} else {
+								saida += "(" + edge.getWeightedEdge().get(v) + ")";
+							}
 						}
 
 						v = new HashMap<Integer, Integer>();
 						v.put(integer, i);
 						if ((edge.getWeightedEdge().get(v)) != null) {
-							saida += "(" + edge.getWeightedEdge().get(v) + ")";
+							if(edge.getWeightedEdge().get(v) - edge.getWeightedEdge().get(v).intValue() == 0) {
+								saida += "(" + edge.getWeightedEdge().get(v).intValue() + ")";
+							} else {
+								saida += "(" + edge.getWeightedEdge().get(v) + ")";
+							}
 						}
 
 					}
@@ -396,7 +404,6 @@ public class GraphController {
 
 		return path;
 	}
-
 	
 	private String BFS(Graph g, int vertex, int[] depth) {
 		String resultBFS = "";

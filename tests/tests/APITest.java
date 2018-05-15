@@ -99,11 +99,11 @@ public class APITest {
 		String adjList, adjMatrix;
 		
 		String list = "\n";
-		list += "1 - 5 2" + "\n";
-		list += "2 - 1 5" + "\n";
-		list += "3 - 5" + "\n";
-		list += "4 - 5" + "\n";
-		list += "5 - 1 2 4 3";
+		list += "1 - 2(0.1) 5(1)" + "\n";
+		list += "2 - 1(0.1) 5(0.2)" + "\n";
+		list += "3 - 4(-9.5) 5(5)" + "\n";
+		list += "4 - 3(-9.5) 5(2.3)" + "\n";
+		list += "5 - 1(1) 2(0.2) 3(5) 4(2.3)";
 		
 		String matrix = "";
 		matrix += "  1 2 3 4 5" + "\n";
@@ -114,8 +114,8 @@ public class APITest {
 		matrix += "5 1 0.2 5 2.3 0";
 		
 		g = api.readWeightedGraph("input4.txt");
-		//adjList = api.graphRepresentation(g, "AL");
-		//assertEquals(list, adjList);
+		adjList = api.graphRepresentation(g, "AL");
+		assertEquals(list, adjList);
 		
 		adjMatrix = api.graphRepresentation(g, "AM");
 		assertEquals(matrix, adjMatrix);
