@@ -1,15 +1,12 @@
 package tests;
 
-import static org.junit.Assert.*;
-
-import java.util.Set;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import api.API;
-import graph.Edge;
 import graph.Graph;
 
 public class APITest {
@@ -57,6 +54,10 @@ public class APITest {
 		graph = api.readGraph("input3.txt");
 		caminho = api.shortestPath(graph, 1, 5);
 		Assert.assertEquals("1 5", caminho);
+		
+		graph = api.readWeightedGraph("input4.txt");
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 5", caminho);
 
 		graph = api.readWeightedGraph("input2.txt");
 		caminho = api.shortestPath(graph, 1, 5);
@@ -65,14 +66,20 @@ public class APITest {
 	}
 
 	@Test
-	public void testGraphRepresentationList() {
-		String list = System.lineSeparator();
-		list += "1 - 5 2" + System.lineSeparator();
-		list += "2 - 1 5" + System.lineSeparator();
-		list += "3 - 5" + System.lineSeparator();
-		list += "4 - 5" + System.lineSeparator();
+	public void testGraphRepresentation() {
+		Graph g;
+		String adjList, adjMatrix;
+		
+		String list = "\n";
+		list += "1 - 5 2" + "\n";
+		list += "2 - 1 5" + "\n";
+		list += "3 - 5" + "\n";
+		list += "4 - 5" + "\n";
 		list += "5 - 1 2 4 3";
-		assertEquals(list, api.graphRepresentation(api.readGraph("input.txt"), "AL"));
+		
+		g = api.readGraph("input3.txt");
+		adjList = api.graphRepresentation(g, "AL");
+		assertEquals(list, adjList);
 	}
 
 	@Test

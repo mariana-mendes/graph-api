@@ -269,7 +269,7 @@ public class GraphController {
 		ArrayList<ArrayList<Integer>> list = this.getAdjacencyList(g);
 		ArrayList<Integer> vertexes;
 		String saida = "";
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 1; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				saida += NOVA_LINHA + i + " -";
 				vertexes = list.get(i);
@@ -291,7 +291,6 @@ public class GraphController {
 
 					}
 				}
-
 			}
 		}
 
