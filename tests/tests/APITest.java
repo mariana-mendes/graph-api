@@ -22,7 +22,7 @@ public class APITest {
 	@Test
 	public void test() {
 		Graph graph;
-		graph = api.readGraph("input.txt");
+		graph = api.readWeightedGraph("input.txt");
 		Set<Integer> v = graph.getVertexes();
 		for (Integer i : v) {
 			System.out.println(i);

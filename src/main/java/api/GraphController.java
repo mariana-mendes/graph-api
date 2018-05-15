@@ -104,8 +104,8 @@ public class GraphController {
 		return max;
 	}
 
-	public String BFS(Graph g, int vertex) {
-		String resultBFS = "";
+	public void BFS(Graph g, int vertex) {
+
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
 		int depht[] = new int[g.getVertexes().size() + 1];
@@ -184,8 +184,6 @@ public class GraphController {
 		} else if(type.equals(ADJACENCY_MATRIX)) {
 			this.printAdjacencyMatrix(g);
 		}
-		
-		return "";
 	}
 
 	private String printAdjacencyMatrix(Graph graph) {
