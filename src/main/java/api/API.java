@@ -58,12 +58,12 @@ public class API {
 		return 0;
 	}
 	
-	public String graphRepresentation(Graph g,String type) {
-		return this.controller.graphRepresentation(g, type);
+	public void graphRepresentation(Graph g,String type) {
+		this.controller.graphRepresentation(g, type);
 	}
 	
-	public String BFS(Graph g, int vertex) {
-		return this.controller.BFS(g, vertex);
+	public void BFS(Graph g, int vertex) {
+		this.controller.BFS(g, vertex);
 	}
 
 	public void DFS(Graph g, int vertex) {

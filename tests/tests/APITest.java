@@ -1,10 +1,16 @@
 package tests;
 
+import static org.junit.Assert.*;
+
+import java.io.IOException;
 import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import api.API;
+import api.GraphController;
 import graph.Edge;
 import graph.Graph;
 
@@ -33,7 +39,7 @@ public class APITest {
 			System.out.println(ee.getEdge());
 		}
 		
-		System.out.println(api.graphRepresentation(graph, "AM"));
+		api.graphRepresentation(graph, "AL");
 	}
 
 	@Test
@@ -62,6 +68,21 @@ public class APITest {
 		Assert.assertEquals(2, api.getMeanEdge(graph), 0);
 		Assert.assertNotEquals(0, api.getMeanEdge(graph));
 		Assert.assertNotEquals(5, api.getMeanEdge(graph));
+	}
+	
+	@Test
+	public void testShortestPath() {
+		String caminho;
+		graph = api.readWeightedGraph("input.txt");
+		//test input.txt
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 5", caminho);
+		
+		graph = api.readWeightedGraph("input2.txt");
+		//test input2.txt
+		caminho = api.shortestPath(graph, 1, 5);
+		Assert.assertEquals("1 2 3 5", caminho);
+		
 	}
 
 }
