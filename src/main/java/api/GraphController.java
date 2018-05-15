@@ -52,7 +52,7 @@ public class GraphController {
 		}
 
 		Graph graph = new Graph(inputVertexes, outputVertexes, numVertexes);
-		
+
 		return graph;
 	}
 
@@ -83,7 +83,7 @@ public class GraphController {
 		}
 
 		Graph graph = new Graph(inputVertexes, outputVertexes, values, numVertexes);
-		
+
 		return graph;
 	}
 
@@ -106,8 +106,8 @@ public class GraphController {
 		return max;
 	}
 
-	public void BFS(Graph g, int vertex) {
-
+	public String BFS(Graph g, int vertex) {
+		String resultBFS = "";
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
 		int depht[] = new int[g.getVertexes().size() + 1];
@@ -120,7 +120,8 @@ public class GraphController {
 
 		while (queue.size() != 0) {
 			vertex = queue.pop();
-			System.out.println(vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]));
+			resultBFS += vertex + " - " + depht[vertex] + " - " + (father[vertex] == 0 ? "" : father[vertex]);
+			resultBFS += NOVA_LINHA;
 			ArrayList<Integer> turn = adj.get(vertex);
 			int turnVertex;
 			for (int i = 0; i < turn.size(); i++) {
@@ -128,14 +129,15 @@ public class GraphController {
 				if (!visited[turn.get(i)]) {
 					depht[turnVertex] = depht[vertex] + 1;
 					father[turnVertex] = vertex;
-					visited[turn.get(i)] = true;
+					visited[turnVertex] = true;
 					queue.add(turn.get(i));
 				}
 			}
 		}
+		return resultBFS;
 	}
 
-	//TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
+	// TO-DO: ADICIONAR PROFUNDIDAD DE CADA VERTICE
 	public void DFS(Graph g, int vertex) {
 		ArrayList<ArrayList<Integer>> adj = this.getAdjacencyList(g);
 		boolean visited[] = new boolean[g.getVertexes().size() + 1];
@@ -150,76 +152,127 @@ public class GraphController {
 		for (Integer vertexTurn : turn) {
 			if (!visited[vertexTurn]) {
 				DFSUtil(vertexTurn, visited, adj);
-				}
+			}
 		}
 	}
 
-	public void graphRepresentation(Graph g, String type) {
-		if(type.equalsIgnoreCase(ADJACENCY_LIST)) {
-			this.printAdjacencyList(g);
-		} else if(type.equals(ADJACENCY_MATRIX)) {
-			this.printAdjacencyMatrix(g);
-		}
+	public boolean connected(Graph graph) {
+		ArrayList<ArrayList<Integer>> adjMatrix = this.getAdjacencyList(graph);
+		boolean visited[] = new boolean[graph.getVertexes().size() + 1];
+		return isConnected(0, visited, adjMatrix);
+
 	}
 
-	private void printAdjacencyMatrix(Graph graph) {
+	private boolean isConnected(int v, boolean[] visited, ArrayList<ArrayList<Integer>> adjMatrix) {
+		visited[v] = true;
+		boolean connection = true;
+		ArrayList<Integer> turn = adjMatrix.get(v);
+		for (Integer vertex : turn) {
+			if (!visited[vertex]) {
+				connection = false;
+				isConnected(vertex, visited, adjMatrix);
+			}
+
+		}
+		return connection;
+	}
+
+	public String graphRepresentation(Graph g, String type) {
+		if (type.equalsIgnoreCase(ADJACENCY_LIST)) {
+			return printAdjacencyList(g);
+		} else if (type.equals(ADJACENCY_MATRIX)) {
+			return this.printAdjacencyMatrix(g);
+		}
+
+		return "";
+	}
+
+	private String printAdjacencyMatrix(Graph graph) {
 		double[][] adjacencyMatrix = getAdjacencyMatrix(graph);
 		String saida = "";
 		for (int i = 0; i < adjacencyMatrix.length; i++) {
 			for (int j = 0; j < adjacencyMatrix.length; j++) {
-				saida += Double.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
+				if (adjacencyMatrix[i][j] == 0.0 || adjacencyMatrix[i][j] == 1.0) {
+					int result = (int) (adjacencyMatrix[i][j]);
+					saida += Integer.toString(result) + ESPACO_EM_BRANCO;
+				} else {
+					saida += Double.toString(adjacencyMatrix[i][j]) + ESPACO_EM_BRANCO;
+				}
 			}
 
 			saida += NOVA_LINHA;
 		}
 
-		System.out.println(saida);
-		System.out.println();
+		return saida;
 	}
 
 	private double[][] getAdjacencyMatrix(Graph graph) {
 		double[][] adjacencyMatrix = initAdjacencyMatrix(graph);
-		try {
-			Set<Edge> edges = graph.getEdges();
-			Set<Integer> vertexes = graph.getVertexes();
-			Integer valueMap;
-			for (Integer vertex : vertexes) {
-				for (Edge edge : edges) {
-					valueMap = edge.getEdge().get(vertex);
-					if (valueMap != null) {
-						Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
-						pair.put(vertex, valueMap);
-						double pesoAresta = edge.getWeight(pair);
-						adjacencyMatrix[vertex-1][valueMap-1] = pesoAresta;
-						adjacencyMatrix[valueMap-1][vertex-1] = pesoAresta;
+		Set<Integer> vertexes = graph.getVertexes();
+		Set<Edge> edges = graph.getEdges();
+		Integer valueMap;
+		for (Integer vertex : vertexes) {
+			for (Edge edge : edges) {
+				valueMap = edge.getEdge().get(vertex);
+				if (valueMap != null) {
+					Map<Integer, Integer> pair = new HashMap<Integer, Integer>();
+					pair.put(vertex, valueMap);
+					Double pesoAresta = edge.getWeightedEdge().get(pair);
+					if (pesoAresta == null) {
+						adjacencyMatrix[vertex - 1][valueMap - 1] = 1;
+						adjacencyMatrix[valueMap - 1][vertex - 1] = 1;
+					} else {
+						adjacencyMatrix[vertex - 1][valueMap - 1] = edge.getWeightedEdge().get(pair);
+						adjacencyMatrix[valueMap - 1][vertex - 1] = edge.getWeightedEdge().get(pair);
 					}
 				}
 			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
 		}
+
 		return adjacencyMatrix;
 	}
 
 	private double[][] initAdjacencyMatrix(Graph graph) {
 		double[][] adjacencyMatrix = new double[graph.getVertexes().size()][graph.getVertexes().size()];
+		for (int i = 0; i < adjacencyMatrix.length; i++) {
+			for (int j = 0; j < adjacencyMatrix.length; j++) {
+				adjacencyMatrix[i][j] = 0;
+			}
+		}
 		return adjacencyMatrix;
 	}
 
-	private void printAdjacencyList(Graph g) {
+	private String printAdjacencyList(Graph g) {
 		ArrayList<ArrayList<Integer>> list = this.getAdjacencyList(g);
 		ArrayList<Integer> vertexes;
+		String saida = "";
 		for (int i = 1; i < list.size(); i++) {
 			if (list.get(i) != null) {
-				System.out.println();
-				System.out.print(i + " -");
+				saida += NOVA_LINHA + i + " -";
 				vertexes = list.get(i);
-				for (int j = 0; j < vertexes.size(); j++) {
-					System.out.print(" " + vertexes.get(j));
+				for (Integer integer : vertexes) {
+					saida += ESPACO_EM_BRANCO + integer;
+					Set<Edge> e = g.getEdges();
+					for (Edge edge : e) {
+						Map<Integer, Integer> v = new HashMap<Integer, Integer>();
+						v.put(i, integer);
+						if ((edge.getWeightedEdge().get(v)) != null) {
+							saida += "(" + edge.getWeightedEdge().get(v) + ")";
+						}
+
+						v = new HashMap<Integer, Integer>();
+						v.put(integer, i);
+						if ((edge.getWeightedEdge().get(v)) != null) {
+							saida += "(" + edge.getWeightedEdge().get(v) + ")";
+						}
+
+					}
 				}
+
 			}
 		}
+
+		return saida;
 	}
 
 	private ArrayList<ArrayList<Integer>> getAdjacencyList(Graph g) {
@@ -242,35 +295,35 @@ public class GraphController {
 		return adjacency;
 	}
 
-	public String shortestPath(Graph graph, int v1, int v2) throws Exception{
+	public String shortestPath(Graph graph, int v1, int v2) throws Exception {
 		Set<Integer> vertexes = graph.getVertexes();
-		if(!vertexes.contains(v1) && !vertexes.contains(v2)) {
+		if (!vertexes.contains(v1) && !vertexes.contains(v2)) {
 			throw new Exception("V�rtices n�o fazem parte do grafo.");
 		}
-		
+
 		return floydWarshallPath(graph, v1, v2);
 	}
 
 	private String floydWarshallPath(Graph graph, int v1, int v2) {
-		
+
 		double[][] distances = this.getAdjacencyMatrix(graph);
 		int numVertex = distances.length;
 		int[][] next = new int[numVertex][numVertex];
-		
-		//path
+
+		// path
 		Set<Edge> edges = graph.getEdges();
 		for (Edge edge : edges) {
 			Integer[] v = edge.getVertexes();
-			next[v[0]-1][v[1]-1] = v[1];
+			next[v[0] - 1][v[1] - 1] = v[1];
 		}
-		
-		//adjust
+
+		// adjust
 		distances = adjustFMMatrix(distances);
-		
-		//dp
-		for(int k = 0; k < numVertex; k++) {
-			for(int i = 0; i < numVertex; i++) {
-				for(int j = 0; j < numVertex; j++) {
+
+		// dp
+		for (int k = 0; k < numVertex; k++) {
+			for (int i = 0; i < numVertex; i++) {
+				for (int j = 0; j < numVertex; j++) {
 					if (distances[i][k] + distances[k][j] < distances[i][j]) {
 						distances[i][j] = distances[i][k] + distances[k][j];
 						next[i][j] = next[i][k];
@@ -278,47 +331,44 @@ public class GraphController {
 				}
 			}
 		}
-		
+
 		ArrayList<Integer> path = buildPath(v1, v2, next);
-		String ans = path.toString()
-				.replace(",", "")
-				.replace("[", "")
-				.replace("]", "");
-		
+		String ans = path.toString().replace(",", "").replace("[", "").replace("]", "");
+
 		return ans;
 	}
 
 	private double[][] adjustFMMatrix(double[][] distances) {
-		
+
 		int numVertex = distances.length;
-		for(int i = 0; i < numVertex; i++) {
-			for(int j = 0; j < numVertex; j++) {
-				if(i != j && distances[i][j] == 0) {
+		for (int i = 0; i < numVertex; i++) {
+			for (int j = 0; j < numVertex; j++) {
+				if (i != j && distances[i][j] == 0) {
 					distances[i][j] = Double.POSITIVE_INFINITY;
 				}
 			}
 		}
-		
+
 		return distances;
 	}
 
 	private ArrayList<Integer> buildPath(int v1, int v2, int[][] next) {
-		
+
 		ArrayList<Integer> path = new ArrayList<>();
-		//verifica vertices invalidos
-		if(!((v1-1 >= 0 && v1-1 < next.length) && (v2-1 >= 0 && v2-1 < next.length))) {
+		// verifica vertices invalidos
+		if (!((v1 - 1 >= 0 && v1 - 1 < next.length) && (v2 - 1 >= 0 && v2 - 1 < next.length))) {
 			return path;
 		}
-		
+
 		path.add(v1);
-		while(v1 != v2) {
-			v1 = next[v1-1][v2-1];
+		while (v1 != v2) {
+			v1 = next[v1 - 1][v2 - 1];
 			path.add(v1);
 		}
-		
+
 		return path;
 	}
-	
+
 	public String mst(Graph g) {
 		String result = "";
 		int size = g.getVertexes().size();
@@ -351,7 +401,7 @@ public class GraphController {
 			if (!belongToSameSubset) {
 				edgeNumber++;
 				union(parents, srcParent, destParent);
-				result += src + " "+ dest + " ";
+				result += src + " " + dest + " ";
 				result += NOVA_LINHA;
 			}
 
@@ -381,6 +431,5 @@ public class GraphController {
 		int yset = find(parents, y);
 		parents[xset] = yset;
 	}
-
 
 }
