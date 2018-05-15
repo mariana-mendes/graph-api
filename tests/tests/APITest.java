@@ -150,10 +150,34 @@ public class APITest {
 		assertEquals(result, api.DFS(api.readGraph("input3.txt"), 5));
 	}
 
+
 	@Test
 	public void testConnectedGraph() {
 		graph = api.readGraph("input.txt");
 		Assert.assertTrue(api.connected(graph));
+		graph = api.readWeightedGraph("input4.txt");
+		Assert.assertTrue(api.connected(graph));
 	}
+
+	@Test
+	public void MstTest() {
+		
+		String Inputresult = "3 - 0 - 0\n"
+		+ "0 - 1 - 3\n"
+		+ "2 - 1 - 3\n"
+		+ "1 - 2 - 0\n";
+		
+		String Input4result = "5 - 0 - 0\n"+
+		"2 - 1 - 5\n"+
+		"4 - 1 - 5\n"+
+		"1 - 2 - 2\n"+
+		"3 - 2 - 4\n";
+		graph = api.readWeightedGraph("input.txt");
+		assertEquals(Inputresult, api.MST(graph));
+		graph = api.readWeightedGraph("input4.txt");
+		assertEquals(Input4result, api.MST(graph));
+		
+	}
+
 
 }
