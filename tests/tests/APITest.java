@@ -28,17 +28,17 @@ public class APITest {
 	@Test
 	public void test() {
 		Graph graph;
-		graph = api.readWeightedGraph("input.txt");
+		graph = api.readWeightedGraph("input2.txt");
 		Set<Integer> v = graph.getVertexes();
 		for (Integer i : v) {
 			System.out.println(i);
 		}
 
 		Set<Edge> e = graph.getEdges();
-		for(Edge ee :e) {
+		for (Edge ee : e) {
 			System.out.println(ee.getEdge());
 		}
-		
+
 		api.graphRepresentation(graph, "AL");
 	}
 
@@ -69,20 +69,20 @@ public class APITest {
 		Assert.assertNotEquals(0, api.getMeanEdge(graph));
 		Assert.assertNotEquals(5, api.getMeanEdge(graph));
 	}
-	
+
 	@Test
 	public void testShortestPath() {
 		String caminho;
 		graph = api.readWeightedGraph("input.txt");
-		//test input.txt
+		// test input.txt
 		caminho = api.shortestPath(graph, 1, 5);
 		Assert.assertEquals("1 2 5", caminho);
-		
+
 		graph = api.readWeightedGraph("input2.txt");
-		//test input2.txt
+		// test input2.txt
 		caminho = api.shortestPath(graph, 1, 5);
 		Assert.assertEquals("1 2 3 5", caminho);
-		
+
 	}
 
 	@Test
@@ -98,17 +98,22 @@ public class APITest {
 
 	@Test
 	public void testBFS() {
-	//		 2     -------  0
-	//      / \
-	//     1---5   -------  1
-	//        / \
-	//       4   3 -------  2
-	String bfsResult = "2 - 0 - " +System.lineSeparator()+
-					   "1 - 1 - 2" + System.lineSeparator()+
-					   "5 - 1 - 2" + System.lineSeparator()+
-					   "4 - 2 - 5" + System.lineSeparator()+
-					   "3 - 2 - 5" + System.lineSeparator();
-	assertEquals(bfsResult, api.BFS(api.readGraph("input.txt"), 2));
+		// 2 ------- 0
+		// / \
+		// 1---5 ------- 1
+		// / \
+		// 4 3 ------- 2
+		String bfsResult = "2 - 0 - " + System.lineSeparator() + "1 - 1 - 2" + System.lineSeparator() + "5 - 1 - 2"
+				+ System.lineSeparator() + "4 - 2 - 5" + System.lineSeparator() + "3 - 2 - 5" + System.lineSeparator();
+		assertEquals(bfsResult, api.BFS(api.readGraph("input.txt"), 2));
+	}
+
+	@Test
+	public void testConnectedGraph() {
+		graph = api.readGraph("input.txt");
+		Assert.assertTrue(api.connected(graph));
+		//graph= api.readWeightedGraph("input3.txt");
+		//Assert.assertFalse(api.connected(graph));
 	}
 
 }
